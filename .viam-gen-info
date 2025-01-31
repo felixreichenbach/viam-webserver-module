@@ -1,0 +1,12 @@
+{
+  "module_name": "webserver",
+  "namespace": "viam-soleng",
+  "language": "go",
+  "resource_type": "service",
+  "resource_subtype": "generic",
+  "model_name": "webserver",
+  "enable_cloud_build": false,
+  "initialize_git": false,
+  "generator_version": "0.1.0",
+  "generated_on": "2025-01-31T18:56:25.597496Z"
+}

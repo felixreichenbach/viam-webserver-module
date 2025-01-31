@@ -1,0 +1,15 @@
+{
+  "$schema": "https://dl.viam.dev/module.schema.json",
+  "module_id": "viam-soleng:webserver",
+  "visibility": "private",
+  "url": "",
+  "description": "Modular generic service: webserver",
+  "models": [
+    {
+      "api": "rdk:service:generic",
+      "model": "viam-soleng:webserver:webserver"
+    }
+  ],
+  "entrypoint": "./bin/webserver",
+  "first_run": ""
+}
