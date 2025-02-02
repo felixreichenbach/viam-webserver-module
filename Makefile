@@ -10,8 +10,8 @@ build: format update-rdk
 
 module.tar.gz: build
 	rm -f $(BIN_OUTPUT_PATH)/module.tar.gz
-	cp -r static $(BIN_OUTPUT_PATH)
-	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/static meta.json run.sh
+	cp -r my-app $(BIN_OUTPUT_PATH)
+	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/my-app meta.json run.sh
 
 setup:
 	if [ "$(UNAME_S)" = "Linux" ]; then \

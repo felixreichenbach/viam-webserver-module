@@ -91,10 +91,20 @@ func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resou
 	}
 	// TODO: Add port from config
 	const port = ":33333"
+
+	// Define the directory to serve files from
+	staticDir := "./my-app/build"
+
+	// Create a file server handler
+	fs := http.FileServer(http.Dir(staticDir))
+
+	// Handle all requests by serving static files
+	http.Handle("/", fs)
+
 	// Instantiate a new http server
 	s.webserver = &http.Server{
 		Addr:    port,
-		Handler: http.HandlerFunc(serveFile),
+		Handler: fs,
 		TLSConfig: &tls.Config{
 			ClientAuth: tls.NoClientCert,
 		},
@@ -136,7 +146,7 @@ func (s *webserverService) Close(context.Context) error {
 
 func serveFile(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/" {
-		http.ServeFile(w, r, "./static/example.html")
+		http.ServeFile(w, r, "./my-app/build")
 		return
 	}
 	http.NotFound(w, r)
