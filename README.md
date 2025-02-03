@@ -21,6 +21,24 @@ make module.tar.gz
 
 Add the path to `module.tar.gz` to your local Viam module configuration and start viam-server.
 
+## Webserver module configuration
+
+### Attributes
+
+The following attributes are available for this model:
+
+| Name   | Type    | Inclusion | Description                                                     |
+| ------ | ------- | --------- | --------------------------------------------------------------- |
+| `port` | integer | Optional  | Configure the port the webserver listens on. Default is `33333` |
+
+### Example configuration:
+
+```json
+{
+  "port": 33333
+}
+```
+
 ## Create Svelte template single page application
 
 ```
