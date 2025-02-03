@@ -6,22 +6,35 @@
   let apiKeyId = import.meta.env.VITE_API_KEY_ID;
   let apiKey = import.meta.env.VITE_API_KEY;
   const host = import.meta.env.VITE_HOST;
+  const localhost = import.meta.env.VITE_LOCAL_HOST;
   let errorMessage = writable("");
   let machine: VIAM.RobotClient | undefined = undefined;
 
   const handleLogin = async () => {
+    const dialConf: VIAM.DialConf = {
+      host,
+      credentials: {
+        type: "api-key",
+        payload: apiKey,
+        authEntity: apiKeyId,
+      },
+      signalingAddress: "https://app.viam.com:443",
+    };
+
+    /*
+    const directDialConf: VIAM.DialConf = {
+      host: localhost,
+      credentials: {
+        type: "api-key",
+        payload: apiKey,
+        authEntity: apiKeyId,
+      },
+    };
+    console.log(directDialConf);
+    */
+
     try {
-      const machine = await VIAM.createRobotClient({
-        host,
-        credentials: {
-          type: "api-key",
-          /* Replace "<API-KEY>" (including brackets) with your machine's api key */ payload:
-            apiKey,
-          authEntity: apiKeyId,
-          /* Replace "<API-KEY-ID>" (including brackets) with your machine's api key id */
-        },
-        signalingAddress: "https://app.viam.com:443",
-      });
+      const machine = await VIAM.createRobotClient(dialConf);
       console.log("Machine connected", await machine.getCloudMetadata());
     } catch (error) {
       errorMessage.set("An unknown error occurred");
