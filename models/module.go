@@ -3,7 +3,9 @@ package models
 import (
 	"context"
 	"crypto/tls"
+	"fmt"
 	"net/http"
+	"time"
 
 	"go.viam.com/rdk/logging"
 	"go.viam.com/rdk/resource"
@@ -43,6 +45,8 @@ type Config struct {
 	/* Uncomment this if your model does not need to be validated
 	   and has no implicit dependecies. */
 	// resource.TriviallyValidateConfig
+
+	Port int `json:"port"`
 }
 
 // Validate ensures all parts of the config are valid and important fields exist.
@@ -51,6 +55,9 @@ type Config struct {
 // resource being validated; e.g. "components.0".
 func (cfg *Config) Validate(path string) ([]string, error) {
 	// Add config validation code here
+	if cfg.Port > 65535 {
+		return nil, resource.NewConfigValidationError(path, fmt.Errorf("invalid port number %d at %s, port must be between 1 and 65535", cfg.Port, path))
+	}
 	return nil, nil
 }
 
@@ -63,7 +70,7 @@ type webserverService struct {
 	cancelCtx  context.Context
 	cancelFunc func()
 
-	webserver *http.Server
+	server *http.Server
 
 	/* Uncomment this if your model does not need to reconfigure. */
 	// resource.TriviallyReconfigurable
@@ -71,7 +78,7 @@ type webserverService struct {
 	// Uncomment this if the model does not have any goroutines that
 	// need to be shut down while closing.
 	// resource.TriviallyCloseable
-
+	resource.AlwaysRebuild
 }
 
 func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resource.Config, logger logging.Logger) (resource.Resource, error) {
@@ -82,6 +89,11 @@ func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resou
 
 	cancelCtx, cancelFunc := context.WithCancel(context.Background())
 
+	port := 33333
+	if conf.Port != 0 {
+		port = conf.Port
+	}
+
 	s := &webserverService{
 		name:       rawConf.ResourceName(),
 		logger:     logger,
@@ -89,23 +101,34 @@ func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resou
 		cancelCtx:  cancelCtx,
 		cancelFunc: cancelFunc,
 	}
-	// TODO: Add port from config
-	const port = ":33333"
+
+	// Define the directory to serve files from
+	staticDir := "./my-app/build"
+
+	// Create a file server handler
+	fs := http.FileServer(http.Dir(staticDir))
+
+	// Create a new ServeMux
+	mux := http.NewServeMux()
+
+	// Handle all requests by serving static files
+	mux.Handle("/", fs)
+
 	// Instantiate a new http server
-	s.webserver = &http.Server{
-		Addr:    port,
-		Handler: http.HandlerFunc(serveFile),
+	s.server = &http.Server{
+		Addr:    fmt.Sprintf(":%d", port),
+		Handler: fs,
 		TLSConfig: &tls.Config{
 			ClientAuth: tls.NoClientCert,
 		},
 	}
 	// Start the server
 	go func() {
-		if err := s.webserver.ListenAndServe(); err != nil {
+		if err := s.server.ListenAndServe(); err != nil {
 			s.logger.Errorf("Failed to start server: %v", err)
 		}
 	}()
-	s.logger.Infof("Server started on http://localhost%v", port)
+	s.logger.Infof("Server started on http://localhost:%v", port)
 
 	return s, nil
 }
@@ -114,11 +137,13 @@ func (s *webserverService) Name() resource.Name {
 	return s.name
 }
 
+/*
 func (s *webserverService) Reconfigure(ctx context.Context, deps resource.Dependencies, conf resource.Config) error {
 	// Put reconfigure code here
-	s.logger.Infof("Server started on http://localhost:8080")
+
 	return nil
 }
+*/
 
 func (s *webserverService) NewClientFromConn(ctx context.Context, conn rpc.ClientConn, remoteName string, name resource.Name, logger logging.Logger) (resource.Resource, error) {
 	panic("not implemented")
@@ -128,16 +153,16 @@ func (s *webserverService) DoCommand(ctx context.Context, cmd map[string]interfa
 	panic("not implemented")
 }
 
-func (s *webserverService) Close(context.Context) error {
+func (s *webserverService) Close(ctx context.Context) error {
 	// Put close code here
+	// Gracefully shut down the HTTP server
+	if s.server != nil {
+		shutdownCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
+		if err := s.server.Shutdown(shutdownCtx); err != nil {
+			return err
+		}
+	}
 	s.cancelFunc()
 	return nil
-}
-
-func serveFile(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/" {
-		http.ServeFile(w, r, "./static/example.html")
-		return
-	}
-	http.NotFound(w, r)
 }
