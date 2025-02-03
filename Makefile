@@ -7,10 +7,13 @@ export PATH := ${PATH}:$(GOPATH)
 build: format update-rdk
 	rm -f $(BIN_OUTPUT_PATH)/webserver
 	go build $(LDFLAGS) -o $(BIN_OUTPUT_PATH)/webserver main.go
+	rm -rf $(BIN_OUTPUT_PATH)/my-app
+	cd my-app && npm run build
+	cp -r my-app $(BIN_OUTPUT_PATH)
+	
 
 module.tar.gz: build
 	rm -f $(BIN_OUTPUT_PATH)/module.tar.gz
-	cp -r my-app $(BIN_OUTPUT_PATH)
 	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/my-app meta.json run.sh
 
 setup:
