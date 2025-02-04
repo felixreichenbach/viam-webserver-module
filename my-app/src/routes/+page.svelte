@@ -5,7 +5,7 @@
 
   let apiKeyId = import.meta.env.VITE_API_KEY_ID;
   let apiKey = import.meta.env.VITE_API_KEY;
-  const host = import.meta.env.VITE_HOST;
+  const host = document.location.hostname; //import.meta.env.VITE_HOST;
   const localhost = import.meta.env.VITE_LOCAL_HOST;
   let errorMessage = writable("");
   let machine: VIAM.RobotClient | undefined = undefined;
@@ -20,18 +20,6 @@
       },
       signalingAddress: "https://app.viam.com:443",
     };
-
-    /*
-    const directDialConf: VIAM.DialConf = {
-      host: localhost,
-      credentials: {
-        type: "api-key",
-        payload: apiKey,
-        authEntity: apiKeyId,
-      },
-    };
-    console.log(directDialConf);
-    */
 
     try {
       const machine = await VIAM.createRobotClient(dialConf);
