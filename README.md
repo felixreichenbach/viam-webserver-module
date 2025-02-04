@@ -6,7 +6,12 @@ The module contains a Viam generic service which runs a http server pointing to 
 
 Write your webapplication inside of `my-app`.
 
-Local web application development:
+### Prerquisits
+
+1. Install [go](https://go.dev/doc/install)
+2. Install [node](https://nodejs.org/en/download/)
+
+### Local web application development
 
 ```
 cd my-app

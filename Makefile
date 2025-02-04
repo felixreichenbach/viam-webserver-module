@@ -4,11 +4,10 @@ UNAME_S ?= $(shell uname -s)
 GOPATH = $(HOME)/go/bin
 export PATH := ${PATH}:$(GOPATH)
 
-build: format update-rdk
+build: format update-rdk web
 	rm -f $(BIN_OUTPUT_PATH)/webserver
 	go build $(LDFLAGS) -o $(BIN_OUTPUT_PATH)/webserver main.go
 	rm -rf $(BIN_OUTPUT_PATH)/my-app
-	cd my-app && npm run build
 	cp -r my-app/build $(BIN_OUTPUT_PATH)/my-app
 	
 
@@ -34,3 +33,7 @@ format:
 update-rdk:
 	go get go.viam.com/rdk@latest
 	go mod tidy
+
+web:
+	cd my-app && npm install
+	cd my-app && npm run build
