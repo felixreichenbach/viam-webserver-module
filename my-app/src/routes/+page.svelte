@@ -25,6 +25,7 @@
     try {
       const machine = await VIAM.createRobotClient(dialConf);
       console.log("Machine connected", await machine.getCloudMetadata());
+      isLoggedIn.set(true);
     } catch (error) {
       errorMessage.set("An unknown error occurred");
     }
