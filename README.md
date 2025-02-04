@@ -84,3 +84,8 @@ npm run build
 npm run dev
 
 ```
+
+## TODO
+
+- [ ] wait for mdns support by the TypeScript SDK
+
