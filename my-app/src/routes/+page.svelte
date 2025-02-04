@@ -8,6 +8,7 @@
   const host = document.location.hostname; //import.meta.env.VITE_HOST;
   const localhost = import.meta.env.VITE_LOCAL_HOST;
   let errorMessage = writable("");
+  let isLoggedIn = writable(false);
   let machine: VIAM.RobotClient | undefined = undefined;
 
   const handleLogin = async () => {
@@ -35,20 +36,25 @@
 </script>
 
 <main>
-  <h1>Login</h1>
-  <form on:submit|preventDefault={handleLogin}>
-    <div>
-      <label for="username">Username:</label>
-      <input type="text" id="username" bind:value={apiKeyId} required />
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" id="password" bind:value={apiKey} required />
-    </div>
-    <button type="submit">Login</button>
-  </form>
-  {#if $errorMessage}
-    <p style="color: red;">{$errorMessage}</p>
+  {#if $isLoggedIn}
+    <h1>Logged in</h1>
+    <!-- Add more content for logged-in users here -->
+  {:else}
+    <h1>Login</h1>
+    <form on:submit|preventDefault={handleLogin}>
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" bind:value={apiKeyId} required />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" bind:value={apiKey} required />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    {#if $errorMessage}
+      <p style="color: red;">{$errorMessage}</p>
+    {/if}
   {/if}
 </main>
 
