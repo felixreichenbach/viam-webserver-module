@@ -5,13 +5,13 @@
 
   let apiKeyId = import.meta.env.VITE_API_KEY_ID;
   let apiKey = import.meta.env.VITE_API_KEY;
-  const host = document.location.hostname; //import.meta.env.VITE_HOST;
-  const localhost = import.meta.env.VITE_LOCAL_HOST;
+  const host = document.location.hostname; // <not supported by the sdk yet> for local gRPC connection something like "ROBOT-XYZ.local:8080";
   let errorMessage = writable("");
   let isLoggedIn = writable(false);
   let machine: VIAM.RobotClient | undefined = undefined;
 
   const handleLogin = async () => {
+    console.log(host);
     const dialConf: VIAM.DialConf = {
       host,
       credentials: {
@@ -19,7 +19,7 @@
         payload: apiKey,
         authEntity: apiKeyId,
       },
-      signalingAddress: "https://app.viam.com:443",
+      //signalingAddress: "https://app.viam.com:4434",
     };
 
     try {
