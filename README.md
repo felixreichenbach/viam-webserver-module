@@ -46,46 +46,8 @@ The following attributes are available for this model:
 
 ## Create Svelte template single page application
 
-```
-npx sv create my-app
-cd my-app
-npm install
-```
-
-## Change to static adapter
-
-```
-npm i -D @sveltejs/adapter-static
-```
-
-For [single page applications](https://svelte.dev/docs/kit/single-page-apps#Usage) you have to replace the `auto adapter`import with the `static adapter`:
-
-```
-import adapter from '@sveltejs/adapter-static';
-```
-
-And pass a fallback page into the adapter constructor:
-
-```
-adapter: adapter({
-	fallback: '200.html' // may differ from host to host
-})
-```
-
-## Build my-app
-
-```
-npm run build
-```
-
-## Run local development environment
-
-```
-npm run dev
-
-```
+See `my-app` folder
 
 ## TODO
 
 - [ ] wait for mdns support by the TypeScript SDK
-
