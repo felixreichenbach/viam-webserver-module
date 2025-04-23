@@ -1,4 +1,4 @@
-export const prerender = true;
+export const prerender = false;
 
 import type { DialConf } from "@viamrobotics/sdk";
 import type { LayoutLoad } from "./$types";
