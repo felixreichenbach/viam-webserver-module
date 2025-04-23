@@ -3,8 +3,10 @@ package models
 import (
 	"context"
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"go.viam.com/rdk/logging"
@@ -111,13 +113,28 @@ func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resou
 	// Create a new ServeMux
 	mux := http.NewServeMux()
 
+	mux.HandleFunc("/data.json", func(w http.ResponseWriter, r *http.Request) {
+		s.logger.Infof("Received request for /data.json")
+		json, err := s.GetDialConfig(ctx)
+		if err != nil {
+			s.logger.Errorf("Error getting dial config: %v", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header()["Content-Type"] = []string{"application/json"}
+		w.Header()["Access-Control-Allow-Origin"] = []string{"*"}
+
+		w.Write(json)
+	})
+
 	// Handle all requests by serving static files
 	mux.Handle("/", fs)
 
 	// Instantiate a new http server
 	s.server = &http.Server{
 		Addr:    fmt.Sprintf(":%d", port),
-		Handler: fs,
+		Handler: mux,
 		TLSConfig: &tls.Config{
 			ClientAuth: tls.NoClientCert,
 		},
@@ -165,4 +182,53 @@ func (s *webserverService) Close(ctx context.Context) error {
 	}
 	s.cancelFunc()
 	return nil
+}
+
+// GetDialConfig retrieves the dial configuration to be used to connect to the viam machine
+// It returns a JSON object containing the machine's part ID, host, signaling address, and credentials
+func (s *webserverService) GetDialConfig(ctx context.Context) ([]byte, error) {
+
+	partID := os.Getenv("VIAM_MACHINE_PART_ID")
+	if partID == "" {
+		s.logger.Error("VIAM_MACHINE_PART_ID environment variable not set")
+		return nil, fmt.Errorf("VIAM_MACHINE_PART_ID environment variable not set")
+	}
+
+	host, err := os.Hostname()
+	if err != nil {
+		s.logger.Error("error getting hostname: %v", err)
+		return nil, err
+	}
+
+	apiKey := os.Getenv("VIAM_API_KEY")
+	if apiKey == "" {
+		s.logger.Error("VIAM_API_KEY environment variable not set")
+		return nil, fmt.Errorf("VIAM_API_KEY environment variable not set")
+	}
+
+	apiKeyID := os.Getenv("VIAM_API_KEY_ID")
+	if apiKeyID == "" {
+		s.logger.Error("VIAM_API_KEY_ID environment variable not set")
+		return nil, fmt.Errorf("VIAM_API_KEY_ID environment variable not set")
+	}
+
+	data := map[string]interface{}{
+		partID: map[string]interface{}{
+			"host":             host,
+			"signalingAddress": "https://app.viam.com:443",
+			"credentials": map[string]interface{}{
+				"type":       "api-key",
+				"authEntity": apiKeyID,
+				"payload":    apiKey,
+			},
+		},
+	}
+
+	js, err := json.Marshal(data)
+	if err != nil {
+		s.logger.Error("error marshalling data %v", err)
+		return nil, err
+	}
+	return js, nil
+
 }
