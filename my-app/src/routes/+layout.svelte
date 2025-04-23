@@ -12,7 +12,9 @@
   }
 
   let { data, children }: Props = $props();
-  data["255bbeb9-6231-49a1-b265-41ae796bacdc"]["host"] =
+
+  // TODO: Make this dynamic and support offline connections
+  data["255bbeb9-6231-49a1-b265-41ae796bacdc"].host =
     "mac-felix-main.9e2zv86qpa.viam.cloud";
 </script>
 
