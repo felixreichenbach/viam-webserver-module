@@ -3,7 +3,7 @@
   import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
   import { ViamProvider } from "$lib";
   import type { Snippet } from "svelte";
-  import Parts from "./components/parts.svelte";
+  import Camera from "./components/camera.svelte";
   import type { DialConf } from "@viamrobotics/sdk";
 
   interface Props {
@@ -12,14 +12,10 @@
   }
 
   let { data, children }: Props = $props();
-
-  // TODO: Make this dynamic and support offline connections
-  data["255bbeb9-6231-49a1-b265-41ae796bacdc"].host =
-    "mac-felix-main.9e2zv86qpa.viam.cloud";
 </script>
 
 <ViamProvider dialConfigs={data}>
-  <Parts />
+  <Camera partID={Object.keys(data)[0]} name="camera" />
   {@render children()}
   <SvelteQueryDevtools />
 </ViamProvider>

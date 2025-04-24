@@ -48,7 +48,8 @@ type Config struct {
 	   and has no implicit dependecies. */
 	// resource.TriviallyValidateConfig
 
-	Port int `json:"port"`
+	Port          int    `json:"port"`
+	RemoteAddress string `json:"remote_address"`
 }
 
 // Validate ensures all parts of the config are valid and important fields exist.
@@ -133,7 +134,7 @@ func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resou
 
 	// Instantiate a new http server
 	s.server = &http.Server{
-		Addr:    fmt.Sprintf(":%d", port),
+		Addr:    fmt.Sprintf(":%d", port), // TODO: Bind to localhost
 		Handler: mux,
 		TLSConfig: &tls.Config{
 			ClientAuth: tls.NoClientCert,
@@ -194,10 +195,10 @@ func (s *webserverService) GetDialConfig(ctx context.Context) ([]byte, error) {
 		return nil, fmt.Errorf("VIAM_MACHINE_PART_ID environment variable not set")
 	}
 
-	host, err := os.Hostname()
-	if err != nil {
-		s.logger.Error("error getting hostname: %v", err)
-		return nil, err
+	host := "localhost"
+	if s.cfg.RemoteAddress != "" {
+		s.logger.Infof("Using remote address: %s", s.cfg.RemoteAddress)
+		host = s.cfg.RemoteAddress
 	}
 
 	apiKey := os.Getenv("VIAM_API_KEY")
