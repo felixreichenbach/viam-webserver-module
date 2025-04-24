@@ -41,7 +41,8 @@ The following attributes are available for this model:
 
 ```json
 {
-  "port": 33333
+  "port": 33332,
+  "remote_address": "part.machine.viam.cloud"
 }
 ```
 
