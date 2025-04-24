@@ -32,15 +32,17 @@ Add the path to `module.tar.gz` to your local Viam module configuration and star
 
 The following attributes are available for this model:
 
-| Name   | Type    | Inclusion | Description                                                     |
-| ------ | ------- | --------- | --------------------------------------------------------------- |
-| `port` | integer | Optional  | Configure the port the webserver listens on. Default is `33333` |
+| Name             | Type    | Inclusion | Description                                                     |
+| ---------------- | ------- | --------- | --------------------------------------------------------------- |
+| `port`           | integer | Optional  | Configure the port the webserver listens on. Default is `33333` |
+| `remote_address` | string  | Optional  | Configure the machine's remote address. Default is `localhost`  |
 
 ### Example configuration:
 
 ```json
 {
-  "port": 33333
+  "port": 33332,
+  "remote_address": "part.machine.viam.cloud"
 }
 ```
 

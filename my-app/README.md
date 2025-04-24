@@ -1,42 +1,41 @@
-# sv
+# Viam Svelte Sample Application
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This is an example of a Viam web application using Svelte. Feel free to create your own from scratch using the instructions here [`sv`](https://github.com/sveltejs/cli) or change the the example contained in this repository.
 
-## Creating a project
+## Local Development
 
-If you're seeing this, you've probably already done this step. Congrats!
+To run the application locally you can provide machine credentials via the following VITE `.env`file:
 
-```bash
-# create a new project in the current directory
-npx sv create
+````json
+VITE_CONFIGS='{"<- your part id ->": {
+  "host": "aaaaa.xxxxx.viam.cloud",
+  "credentials": {
+    "type": "api-key" ,
+    "payload": "xxxxxxx",
+    "authEntity": "xxxxxxx"
+  },
+  "signalingAddress": "https://app.viam.com:443"
+}}'
 
-# create a new project in my-app
-npx sv create my-app
-```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Once you've created the `.env`file (optional) and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
 npm run dev
 
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
-```
+````
 
 ## Building
 
-To create a production version of your app:
+To create a production version of your app / module:
 
 ```bash
-npm run build
+make module.tar.gz
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
 
 ## Adapter Configuration
 
 Changed in svelte.config.js to "@sveltejs/adapter-static"
+[adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
