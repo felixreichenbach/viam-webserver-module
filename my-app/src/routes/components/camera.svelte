@@ -45,12 +45,12 @@
     <div class="basis-1/3">
       <div class="flex flex-col items-center justify-center gap-4 h-full">
         <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-[50px] px-[100px] mb-20 rounded"
+          class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mb-20 rounded"
           onclick={handleButtonClick}>Refresh</button
         >
 
         <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-[50px] px-[100px] rounded"
+          class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] rounded"
           onclick={handleButtonClick}>Accept</button
         >
       </div>
