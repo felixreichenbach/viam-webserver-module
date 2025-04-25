@@ -21,7 +21,7 @@
 <ViamProvider dialConfigs={data.dialConfig}>
   {console.log("data", data)}
   <div class="flex flex-col items-center justify-center h-screen">
-    <h1 class="text-3xl font-bold">HPE Sealant Check</h1>
+    <h1 class="text-3xl font-bold">Contour Check</h1>
     <div class="my-4"></div>
     <Vision
       partID={Object.keys(data.dialConfig)[0]}
