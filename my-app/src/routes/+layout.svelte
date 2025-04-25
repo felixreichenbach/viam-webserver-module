@@ -5,6 +5,7 @@
   import type { Snippet } from "svelte";
   import Camera from "./components/camera.svelte";
   import type { DialConf } from "@viamrobotics/sdk";
+  import Vision from "./components/vision.svelte";
 
   interface Props {
     children: Snippet;
@@ -19,6 +20,7 @@
     <h1 class="text-3xl font-bold">HPE Sealant Check</h1>
     <div class="my-4"></div>
     <Camera partID={Object.keys(data)[0]} name="camera" />
+    <Vision partID={Object.keys(data)[0]} name="vision-sealant" />
     {@render children()}
   </div>
 
