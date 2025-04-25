@@ -17,7 +17,8 @@
     "build": "make module.tar.gz",
     "path": "bin/module.tar.gz",
     "arch": [
-      "linux/arm64"
+      "linux/arm64",
+      "darwin/arm64"
     ]
   }
 }
