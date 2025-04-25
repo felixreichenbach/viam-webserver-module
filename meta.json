@@ -14,6 +14,7 @@
   "first_run": "",
   "build": {
     "setup": "./setup.sh",
+    "build": "make module.tar.gz",
     "path": "bin/module.tar.gz",
     "arch": [
       "linux/amd64",
