@@ -7,7 +7,7 @@
   "models": [
     {
       "api": "rdk:service:generic",
-      "model": "hpe-automotive:webserver:webserver"
+      "model": "hpe-automotive:service:webserver"
     }
   ],
   "entrypoint": "./bin/webserver",
