@@ -50,6 +50,8 @@ type Config struct {
 
 	Port          int    `json:"port"`
 	RemoteAddress string `json:"remote_address"`
+	CameraName    string `json:"camera_name"`
+	VisionName    string `json:"vision_name"`
 }
 
 // Validate ensures all parts of the config are valid and important fields exist.
@@ -214,16 +216,21 @@ func (s *webserverService) GetDialConfig(ctx context.Context) ([]byte, error) {
 	}
 
 	data := map[string]interface{}{
-		partID: map[string]interface{}{
-			"host":             host,
-			"signalingAddress": "https://app.viam.com:443",
-			"credentials": map[string]interface{}{
-				"type":       "api-key",
-				"authEntity": apiKeyID,
-				"payload":    apiKey,
+		"dialConfig": map[string]interface{}{
+			partID: map[string]interface{}{
+				"host":             host,
+				"signalingAddress": "https://app.viam.com:443",
+				"credentials": map[string]interface{}{
+					"type":       "api-key",
+					"authEntity": apiKeyID,
+					"payload":    apiKey,
+				},
 			},
 		},
-	}
+		"webConfig": map[string]interface{}{
+			"cameraName": s.cfg.CameraName,
+			"visionName": s.cfg.VisionName,
+		}}
 
 	js, err := json.Marshal(data)
 	if err != nil {
