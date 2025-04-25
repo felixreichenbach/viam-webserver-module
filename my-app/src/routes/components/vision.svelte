@@ -5,9 +5,10 @@
   interface Props {
     partID: string;
     name: string;
+    cameraName: string;
   }
 
-  let { partID, name }: Props = $props();
+  let { partID, name, cameraName }: Props = $props();
 
   const visionClient = createResourceClient(
     VisionClient,
@@ -24,7 +25,7 @@
     visionClient, // client
     "captureAllFromCamera", // method
     [
-      "camera", //"sealant-ref", // camera name
+      cameraName,
       {
         returnImage: true,
         returnClassifications: false,
@@ -43,11 +44,20 @@
       : undefined
   );
 
-  async function handleButtonClick() {
-    console.log("Button clicked!");
+  const extra = $derived(
+    query.current.data
+      ? JSON.stringify(query.current.data.extra, null, 2)
+      : undefined
+  );
+
+  function handleCheckContour() {
     query.current.refetch().then(() => {
-      console.log("refreshed");
+      console.log("contour refreshed");
     });
+  }
+
+  function handleAccept() {
+    console.log("Button Accept: To be implemented");
   }
 </script>
 
@@ -61,13 +71,16 @@
       <div class="flex flex-col items-center justify-center gap-4 h-full">
         <button
           class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mb-20 rounded"
-          onclick={handleButtonClick}>Refresh</button
+          onclick={handleCheckContour}>Refresh</button
         >
 
         <button
           class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] rounded"
-          onclick={handleButtonClick}>Accept</button
+          onclick={handleAccept}>Accept</button
         >
+        <div class="text-sm text-gray-500">
+          <pre>{extra}</pre>
+        </div>
       </div>
     </div>
   </div>

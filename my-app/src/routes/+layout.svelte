@@ -19,8 +19,11 @@
   <div class="flex flex-col items-center justify-center h-screen">
     <h1 class="text-3xl font-bold">HPE Sealant Check</h1>
     <div class="my-4"></div>
-    <Camera partID={Object.keys(data)[0]} name="camera" />
-    <Vision partID={Object.keys(data)[0]} name="vision-sealant" />
+    <Vision
+      partID={Object.keys(data)[0]}
+      name="vision-sealant"
+      cameraName="sealant-unmodified"
+    />
     {@render children()}
   </div>
 
