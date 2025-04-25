@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	Webserver = resource.NewModel("hpe-automotive", "service", "webserver")
+	Webserver = resource.NewModel("hpe-automotive", "service", "sealant-check-ui")
 	//errUnimplemented = errors.New("unimplemented")
 )
 
