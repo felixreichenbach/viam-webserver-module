@@ -11,5 +11,8 @@ export const load: LayoutLoad = async ({ fetch }) => {
     string,
     DialConf
   >;
-  return dialConfig;
+
+  const cameraName = data.webConfig["cameraName"] as string;
+  const visionName = data.webConfig["visionName"] as string;
+  return { dialConfig, cameraName, visionName };
 };

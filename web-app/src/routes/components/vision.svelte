@@ -8,7 +8,7 @@
     cameraName: string;
   }
 
-  let { partID, name, cameraName }: Props = $props();
+  let { partID, name: name, cameraName }: Props = $props();
 
   const visionClient = createResourceClient(
     VisionClient,

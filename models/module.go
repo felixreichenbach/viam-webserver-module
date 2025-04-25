@@ -108,7 +108,7 @@ func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resou
 	}
 
 	// Define the directory to serve files from
-	staticDir := "./my-app"
+	staticDir := "./web-app"
 
 	// Create a file server handler
 	fs := http.FileServer(http.Dir(staticDir))
