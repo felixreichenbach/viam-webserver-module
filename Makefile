@@ -4,7 +4,7 @@ UNAME_S ?= $(shell uname -s)
 GOPATH = $(HOME)/go/bin
 export PATH := ${PATH}:$(GOPATH)
 
-build: format update-rdk web
+build: format update-rdk
 	rm -f $(BIN_OUTPUT_PATH)/webserver
 	go build $(LDFLAGS) -o $(BIN_OUTPUT_PATH)/webserver main.go
 	rm -rf $(BIN_OUTPUT_PATH)/web-app
@@ -35,5 +35,5 @@ update-rdk:
 	go mod tidy
 
 web:
-	cd web-app && nvm run npm install
+	cd web-app && npm install
 	cd web-app && npm run build
