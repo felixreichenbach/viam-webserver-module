@@ -17,13 +17,14 @@
 
   const queryOptions = $state({
     refetchInterval: 1000,
+    enabled: false,
   });
 
   const query = createResourceQuery(
     visionClient, // client
     "captureAllFromCamera", // method
     [
-      "sealant-ref", // camera name
+      "camera", //"sealant-ref", // camera name
       {
         returnImage: true,
         returnClassifications: false,
@@ -31,7 +32,7 @@
         returnObjectPointClouds: false,
       },
     ], // CaptureAllOptions
-    queryOptions // options
+    () => queryOptions // options
   );
 
   const src = $derived(
@@ -42,14 +43,18 @@
       : undefined
   );
 
-  function handleButtonClick() {
+  async function handleButtonClick() {
     console.log("Button clicked!");
+    query.current.refetch().then(() => {
+      console.log("refreshed");
+    });
   }
 </script>
 
 {#if query.current.error}
   {query.current.error.message}
 {:else}
+  {console.log("refreshed")}
   <div class="flex flex-row gap-20 m-4">
     <div class="basis-400"><img {src} alt="" width="700" /></div>
     <div class="basis-1/3">
