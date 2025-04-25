@@ -32,17 +32,21 @@ Add the path to `module.tar.gz` to your local Viam module configuration and star
 
 The following attributes are available for this model:
 
-| Name             | Type    | Inclusion | Description                                                     |
-| ---------------- | ------- | --------- | --------------------------------------------------------------- |
-| `port`           | integer | Optional  | Configure the port the webserver listens on. Default is `33333` |
-| `remote_address` | string  | Optional  | Configure the machine's remote address. Default is `localhost`  |
+| Name             | Type    | Inclusion | Description                                                              |
+| ---------------- | ------- | --------- | ------------------------------------------------------------------------ |
+| `camera_name`    | string  | Optional  | Configure the name of the camera to be used. Default is `camera`         |
+| `vision_name`    | string  | Optional  | Configure the name of the vision service to be used. Default is `vision` |
+| `port`           | integer | Optional  | Configure the port the webserver listens on. Default is `33332`          |
+| `remote_address` | string  | Optional  | Configure the machine's remote address. Default is `localhost`           |
 
 ### Example configuration:
 
 ```json
 {
-  "port": 33332,
-  "remote_address": "part.machine.viam.cloud"
+  "camera_name": "name of the camera",
+  "vision_name": "name of the vision service",
+  "remote_address": "part.machine.viam.cloud",
+  "port": 33332
 }
 ```
 

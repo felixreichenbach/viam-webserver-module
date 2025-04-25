@@ -7,13 +7,13 @@ export PATH := ${PATH}:$(GOPATH)
 build: format update-rdk web
 	rm -f $(BIN_OUTPUT_PATH)/webserver
 	go build $(LDFLAGS) -o $(BIN_OUTPUT_PATH)/webserver main.go
-	rm -rf $(BIN_OUTPUT_PATH)/my-app
-	cp -r my-app/build $(BIN_OUTPUT_PATH)/my-app
+	rm -rf $(BIN_OUTPUT_PATH)/web-app
+	cp -r web-app/build $(BIN_OUTPUT_PATH)/web-app
 	
 
 module.tar.gz: build
 	rm -f $(BIN_OUTPUT_PATH)/module.tar.gz
-	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/my-app meta.json
+	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/web-app meta.json
 
 setup:
 	if [ "$(UNAME_S)" = "Linux" ]; then \
@@ -25,7 +25,7 @@ setup:
 
 
 clean:
-	rm -rf $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/module.tar.gz webserver $(BIN_OUTPUT_PATH)/my-app
+	rm -rf $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/module.tar.gz webserver $(BIN_OUTPUT_PATH)/web-app
 
 format:
 	gofmt -w -s .
@@ -35,5 +35,5 @@ update-rdk:
 	go mod tidy
 
 web:
-	cd my-app && npm install
-	cd my-app && npm run build
+	cd web-app && npm install
+	cd web-app && npm run build
