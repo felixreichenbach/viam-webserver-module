@@ -1,15 +1,23 @@
 {
   "$schema": "https://dl.viam.dev/module.schema.json",
-  "module_id": "viam-soleng:webserver",
+  "module_id": "hpe-automotive:sealant-check-ui",
   "visibility": "private",
   "url": "https://github.com/felixreichenbach/web-app-module",
-  "description": "Modular generic service: webserver",
+  "description": "Viam module running a web server with a Svelte web app.",
   "models": [
     {
       "api": "rdk:service:generic",
-      "model": "viam-soleng:webserver:webserver"
+      "model": "hpe-automotive:webserver:webserver"
     }
   ],
   "entrypoint": "./bin/webserver",
-  "first_run": ""
+  "first_run": "",
+  "build": {
+    "build": "make module.tar.gz",
+    "path": "bin/module.tar.gz",
+    "arch": [
+      "linux/amd64",
+      "linux/arm64"
+    ]
+  }
 }
