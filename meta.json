@@ -13,7 +13,7 @@
   "entrypoint": "./bin/webserver",
   "first_run": "",
   "build": {
-    "build": "make module.tar.gz",
+    "setup": "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash",
     "path": "bin/module.tar.gz",
     "arch": [
       "linux/amd64",
