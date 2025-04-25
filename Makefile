@@ -7,22 +7,10 @@ export PATH := ${PATH}:$(GOPATH)
 build: format update-rdk
 	rm -f $(BIN_OUTPUT_PATH)/webserver
 	go build $(LDFLAGS) -o $(BIN_OUTPUT_PATH)/webserver main.go
-	rm -rf $(BIN_OUTPUT_PATH)/web-app
-	cp -r web-app/build $(BIN_OUTPUT_PATH)/web-app
-	
 
 module.tar.gz: build
 	rm -f $(BIN_OUTPUT_PATH)/module.tar.gz
-	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/web-app meta.json
-
-setup:
-	if [ "$(UNAME_S)" = "Linux" ]; then \
-		sudo apt-get install -y apt-utils coreutils tar libnlopt-dev libjpeg-dev pkg-config; \
-	fi
-	# remove unused imports
-	go install golang.org/x/tools/cmd/goimports@latest
-	find . -name '*.go' -exec $(GOPATH)/goimports -w {} +
-
+	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver meta.json
 
 clean:
 	rm -rf $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/module.tar.gz webserver $(BIN_OUTPUT_PATH)/web-app
@@ -33,3 +21,7 @@ format:
 update-rdk:
 	go get go.viam.com/rdk@latest
 	go mod tidy
+
+web:
+	cd webserver/web-app && npm install
+	cd webserver/web-app && npm run build

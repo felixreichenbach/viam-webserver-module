@@ -1,7 +1,7 @@
 package main
 
 import (
-	"webserver/models"
+	"webserver/webserver"
 
 	"go.viam.com/rdk/module"
 	"go.viam.com/rdk/resource"
@@ -10,5 +10,5 @@ import (
 
 func main() {
 	// ModularMain can take multiple APIModel arguments, if your module implements multiple models.
-	module.ModularMain(resource.APIModel{API: generic.API, Model: models.Webserver})
+	module.ModularMain(resource.APIModel{API: generic.API, Model: webserver.Webserver})
 }
