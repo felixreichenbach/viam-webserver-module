@@ -4,16 +4,13 @@ UNAME_S ?= $(shell uname -s)
 GOPATH = $(HOME)/go/bin
 export PATH := ${PATH}:$(GOPATH)
 
-build: format update-rdk web
+build: format update-rdk
 	rm -f $(BIN_OUTPUT_PATH)/webserver
 	go build $(LDFLAGS) -o $(BIN_OUTPUT_PATH)/webserver main.go
-	rm -rf $(BIN_OUTPUT_PATH)/web-app
-	cp -r web-app/build $(BIN_OUTPUT_PATH)/web-app
-	
 
 module.tar.gz: build
 	rm -f $(BIN_OUTPUT_PATH)/module.tar.gz
-	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/web-app meta.json
+	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver meta.json
 
 setup:
 	if [ "$(UNAME_S)" = "Linux" ]; then \

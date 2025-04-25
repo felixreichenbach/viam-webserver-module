@@ -1,7 +1,7 @@
 {
   "$schema": "https://dl.viam.dev/module.schema.json",
   "module_id": "hpe-automotive:sealant-check-ui",
-  "visibility": "private",
+  "visibility": "public",
   "url": "https://github.com/felixreichenbach/web-app-module",
   "description": "Viam module running a web server with a Svelte web app.",
   "models": [

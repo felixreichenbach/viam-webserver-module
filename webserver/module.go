@@ -1,10 +1,12 @@
-package models
+package webserver
 
 import (
 	"context"
 	"crypto/tls"
+	"embed"
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"os"
 	"time"
@@ -19,6 +21,9 @@ var (
 	Webserver = resource.NewModel("hpe-automotive", "service", "sealant-check-ui")
 	//errUnimplemented = errors.New("unimplemented")
 )
+
+//go:embed web-app
+var staticFS embed.FS
 
 func init() {
 	resource.RegisterService(generic.API, Webserver,
@@ -107,15 +112,29 @@ func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resou
 		cancelFunc: cancelFunc,
 	}
 
-	// Define the directory to serve files from
-	staticDir := "./web-app"
-
-	// Create a file server handler
-	fs := http.FileServer(http.Dir(staticDir))
-
 	// Create a new ServeMux
 	mux := http.NewServeMux()
 
+	var fsToUse fs.FS = staticFS
+	/*
+		{
+			local := os.DirFS("webserver/")
+			temp, err := local.Open("web-app/build/index.html")
+			if err == nil {
+				logger.Infof("using local")
+				fsToUse = local
+				temp.Close()
+			}
+		}
+	*/
+
+	fsToUse, err = fs.Sub(fsToUse, "web-app/build")
+	if err != nil {
+		return nil, err
+	}
+	mux.Handle("/", http.FileServerFS(fsToUse))
+
+	// Handle the /data.json endpoint
 	mux.HandleFunc("/data.json", func(w http.ResponseWriter, r *http.Request) {
 		s.logger.Infof("Received request for /data.json")
 		json, err := s.GetDialConfig(ctx)
@@ -130,9 +149,6 @@ func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resou
 
 		w.Write(json)
 	})
-
-	// Handle all requests by serving static files
-	mux.Handle("/", fs)
 
 	// Instantiate a new http server
 	s.server = &http.Server{
