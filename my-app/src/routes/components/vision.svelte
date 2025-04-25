@@ -18,16 +18,17 @@
   const queryOptions = $state({
     refetchInterval: 1000,
   });
+
   const query = createResourceQuery(
     visionClient, // client
     "captureAllFromCamera", // method
     [
-      "sealant-ref", // camera
+      "sealant-ref", // camera name
       {
         returnImage: true,
-        returnClassifications: true,
+        returnClassifications: false,
         returnDetections: true,
-        returnObjectPointClouds: true,
+        returnObjectPointClouds: false,
       },
     ], // CaptureAllOptions
     queryOptions // options
