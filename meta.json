@@ -10,6 +10,7 @@
       "model": "hpe-automotive:service:sealant-check-ui"
     }
   ],
+  "markdown_link": "https://github.com/felixreichenbach/web-app-module?tab=readme-ov-file#webserver-module-configuration",
   "entrypoint": "./bin/webserver",
   "first_run": "",
   "build": {
