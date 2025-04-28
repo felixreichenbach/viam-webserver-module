@@ -7,7 +7,8 @@
   "models": [
     {
       "api": "rdk:service:generic",
-      "model": "hpe-automotive:service:sealant-check-ui"
+      "model": "hpe-automotive:service:sealant-check-ui",
+      "markdown_link": "README.md#webserver-module-configuration"
     }
   ],
   "entrypoint": "./bin/webserver",
