@@ -79,12 +79,16 @@
   </div>
 {:else if status.current === "connected"}
   {#if !query.current.error}
-    <div class="flex border-0 border-red-500">
-      <div class="p-4">
+    <div class="flex border-0 border-red-500 overflow-auto">
+      <div class="border-0">
         <!--column left -->
-        <img {src} alt="" height="700" />
+        <img
+          {src}
+          alt=""
+          class="object-scale-down max-w-full max-h-full w-full h-auto"
+        />
       </div>
-      <div class="flex-col border-0 p-4 w-full">
+      <div class="flex-col border-0 p-4 w-1/3">
         <!--column right -->
         <div class="flex flex-nowrap border-0 items-center justify-between">
           <h1 class="text-2xl font-bold mt-12 mb-10 mx-auto">Sealant Check</h1>
@@ -96,23 +100,20 @@
           </button>
         </div>
         <div
-          class="flex flex-col border-0 border-purple-500 items-center justify-center min-h-[200px]"
+          class="flex flex-col border-0 border-purple-500 items-center justify-center min-h-[100px]"
         >
           <button
-            class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mb-20 rounded"
+            class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mb-10 rounded"
             onclick={handleCheckContour}>Check</button
           >
           <div class="flex-grow"></div>
           <button
-            class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] rounded"
+            class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mb-10 rounded"
             onclick={handleAccept}>Accept</button
           >
         </div>
         <div
-          class="flex flex-col border-0 border-purple-500 items-center justify-center flex-grow min-h-[100px]"
-        ></div>
-        <div
-          class="flex flex-col border-0 border-purple-500 items-center justify-center min-h-[200px]"
+          class="flex flex-col border-0 border-purple-500 items-center justify-center"
         >
           <!--column right row 2 -->
           <Metrics data={extra} />
