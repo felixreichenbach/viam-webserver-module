@@ -82,10 +82,19 @@
     <div class="flex border-0 border-red-500">
       <div class="p-4">
         <!--column left -->
-        <img {src} alt="" width="700" />
+        <img {src} alt="" height="700" />
       </div>
-      <div class="flex-col p-4">
+      <div class="flex-col border-0 p-4 w-full">
         <!--column right -->
+        <div class="flex flex-nowrap border-0 items-center justify-between">
+          <h1 class="text-2xl font-bold mt-12 mb-10 mx-auto">Sealant Check</h1>
+          <button
+            class="bg-blue-200 hover:bg-blue-500 text-xl text-white py-[10px] px-[10px] rounded ml-auto self-center"
+            onclick={() => location.reload()}
+          >
+            Reload
+          </button>
+        </div>
         <div
           class="flex flex-col border-0 border-purple-500 items-center justify-center min-h-[200px]"
         >

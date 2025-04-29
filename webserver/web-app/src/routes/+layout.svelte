@@ -23,7 +23,6 @@
   <div
     class="flex h-screen w-[1280px] flex-col gap-6 border-1 border-green-200 mx-auto"
   >
-    <h1 class="text-2xl font-bold mt-12">Sealant Check</h1>
     <Vision
       partID={Object.keys(data.dialConfig)[0]}
       name={data.visionName}
