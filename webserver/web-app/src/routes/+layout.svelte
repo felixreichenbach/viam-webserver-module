@@ -1,7 +1,7 @@
 <script lang="ts">
   import "../app.css";
   import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
-  import { ViamProvider } from "$lib";
+  import { ViamProvider, useConnectionStatus } from "$lib";
   import type { Snippet } from "svelte";
   import type { DialConf } from "@viamrobotics/sdk";
   import Vision from "./components/vision.svelte";

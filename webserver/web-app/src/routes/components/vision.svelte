@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { createResourceClient, createResourceQuery } from "$lib";
+  import {
+    createResourceClient,
+    createResourceQuery,
+    useConnectionStatus,
+  } from "$lib";
   import { Struct, VisionClient } from "@viamrobotics/sdk";
   import Metrics from "./metrics.svelte";
 
@@ -16,6 +20,9 @@
     () => partID,
     () => name
   );
+
+  const status = useConnectionStatus(() => partID);
+  $inspect(status.current);
 
   const queryOptions = $state({
     refetchInterval: 1000,
@@ -61,39 +68,49 @@
 </script>
 
 <!-- Main Content Area -->
-
-{#if !query.current.error}
-  <div class="flex border-0 border-red-500">
-    <div class="p-4">
-      <!--column left -->
-      <img {src} alt="" width="700" />
-    </div>
-    <div class="flex-col p-4">
-      <!--column right -->
-      <div
-        class="flex flex-col border-0 border-purple-500 items-center justify-center min-h-[200px]"
-      >
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mb-20 rounded"
-          onclick={handleCheckContour}>Check</button
-        >
-        <div class="flex-grow"></div>
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] rounded"
-          onclick={handleAccept}>Accept</button
-        >
-      </div>
-      <div
-        class="flex flex-col border-0 border-purple-500 items-center justify-center flex-grow min-h-[100px]"
-      ></div>
-      <div
-        class="flex flex-col border-0 border-purple-500 items-center justify-center min-h-[200px]"
-      >
-        <!--column right row 2 -->
-        <Metrics data={extra} />
-      </div>
-    </div>
+{#if status.current === "disconnected"}
+  <div class="flex flex-col items-center justify-center min-h-screen">
+    <h1 class="text-2xl font-bold">Disconnected</h1>
+    <p class="text-lg">Please connect to the robot.</p>
   </div>
-{:else}
-  {query.current.error.message}
+{:else if status.current === "connecting"}
+  <div class="flex flex-col items-center justify-center min-h-screen">
+    <h1 class="text-2xl font-bold">Connecting...</h1>
+  </div>
+{:else if status.current === "connected"}
+  {#if !query.current.error}
+    <div class="flex border-0 border-red-500">
+      <div class="p-4">
+        <!--column left -->
+        <img {src} alt="" width="700" />
+      </div>
+      <div class="flex-col p-4">
+        <!--column right -->
+        <div
+          class="flex flex-col border-0 border-purple-500 items-center justify-center min-h-[200px]"
+        >
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mb-20 rounded"
+            onclick={handleCheckContour}>Check</button
+          >
+          <div class="flex-grow"></div>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] rounded"
+            onclick={handleAccept}>Accept</button
+          >
+        </div>
+        <div
+          class="flex flex-col border-0 border-purple-500 items-center justify-center flex-grow min-h-[100px]"
+        ></div>
+        <div
+          class="flex flex-col border-0 border-purple-500 items-center justify-center min-h-[200px]"
+        >
+          <!--column right row 2 -->
+          <Metrics data={extra} />
+        </div>
+      </div>
+    </div>
+  {:else}
+    {query.current.error.message}
+  {/if}
 {/if}
