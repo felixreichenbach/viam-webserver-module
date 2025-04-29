@@ -20,9 +20,10 @@
 
 <ViamProvider dialConfigs={data.dialConfig}>
   {console.log("data", data)}
-  <div class="flex flex-col items-center justify-center h-screen">
-    <h1 class="text-3xl font-bold">Contour Check</h1>
-    <div class="my-4"></div>
+  <div
+    class="flex h-screen w-[1280px] flex-col gap-6 border-1 border-green-200 mx-auto"
+  >
+    <h1 class="text-2xl font-bold mt-12">Sealant Check</h1>
     <Vision
       partID={Object.keys(data.dialConfig)[0]}
       name={data.visionName}

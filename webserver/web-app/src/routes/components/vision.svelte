@@ -61,34 +61,39 @@
 </script>
 
 <!-- Main Content Area -->
-<div class="flex flex-col gap-6 border-1 border-green-200">
-  <h1 class="text-2xl font-bold">Sealant Check</h1>
-  {#if !query.current.error}
-    <div class="flex h-screen bg-gray-100 border-1 border-red-500">
-      <div class="border-b dark:border-gray-700 p-4">
-        <p>column left</p>
-        <img {src} alt="" width="700" />
-      </div>
-      <div class="flex-1 flex flex-col">
-        <div class="flex-1 border-b border-1 border-purple-500">
-          <p>row 1</p>
-          <button
-            class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mb-20 rounded"
-            onclick={handleCheckContour}>Check</button
-          >
 
-          <button
-            class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] rounded"
-            onclick={handleAccept}>Accept</button
-          >
-        </div>
-        <div class="flex-1 border-b border-1 border-purple-500">
-          <p>row 2</p>
-          <Metrics data={extra} />
-        </div>
+{#if !query.current.error}
+  <div class="flex border-0 border-red-500">
+    <div class="p-4">
+      <!--column left -->
+      <img {src} alt="" width="700" />
+    </div>
+    <div class="flex-col p-4">
+      <!--column right -->
+      <div
+        class="flex flex-col border-0 border-purple-500 items-center justify-center min-h-[200px]"
+      >
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mb-20 rounded"
+          onclick={handleCheckContour}>Check</button
+        >
+        <div class="flex-grow"></div>
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] rounded"
+          onclick={handleAccept}>Accept</button
+        >
+      </div>
+      <div
+        class="flex flex-col border-0 border-purple-500 items-center justify-center flex-grow min-h-[100px]"
+      ></div>
+      <div
+        class="flex flex-col border-0 border-purple-500 items-center justify-center min-h-[200px]"
+      >
+        <!--column right row 2 -->
+        <Metrics data={extra} />
       </div>
     </div>
-  {:else}
-    {query.current.error.message}
-  {/if}
-</div>
+  </div>
+{:else}
+  {query.current.error.message}
+{/if}

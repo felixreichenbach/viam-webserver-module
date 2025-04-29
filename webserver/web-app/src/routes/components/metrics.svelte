@@ -21,7 +21,7 @@
     {#each contours as contour, index}
       <li>
         <strong>Contour {index + 1}:</strong>
-        <ul>
+        <ul style="list-style-type: disc; padding-left: 20px;">
           <li>Arclength: {contour?.arclength}</li>
           <li>Area: {contour?.area}</li>
           <li>Hausdorff: {JSON.stringify(contour.hausdorff)}</li>
