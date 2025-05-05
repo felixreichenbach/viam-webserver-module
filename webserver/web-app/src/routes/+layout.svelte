@@ -19,6 +19,7 @@
   function handleMenuClick() {
     console.log("Menu button clicked");
     // Add your menu handling logic here
+    location.reload();
   }
 </script>
 
