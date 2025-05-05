@@ -5,7 +5,7 @@ go 1.23.8
 toolchain go1.24.2
 
 require (
-	go.viam.com/rdk v0.72.0
+	go.viam.com/rdk v0.72.1
 	go.viam.com/utils v0.1.141
 )
 

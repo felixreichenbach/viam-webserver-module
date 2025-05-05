@@ -1,5 +1,7 @@
 <script lang="ts">
   import { createResourceClient, createResourceQuery } from "$lib";
+  import VisionControl from "$lib/vision-control.svelte";
+  import VisionData from "$lib/vision-data.svelte";
   import { VisionClient } from "@viamrobotics/sdk";
 
   interface Props {
@@ -13,7 +15,7 @@
   const visionClient = createResourceClient(
     VisionClient,
     () => partID,
-    () => name
+    () => name,
   );
 
   const queryOptions = $state({
@@ -33,21 +35,19 @@
         returnObjectPointClouds: false,
       },
     ], // CaptureAllOptions
-    () => queryOptions // options
+    () => queryOptions, // options
   );
 
   const src = $derived(
     query.current.data
       ? URL.createObjectURL(
-          new Blob([query.current.data.image!.image], { type: "image/png" })
+          new Blob([query.current.data.image!.image], { type: "image/png" }),
         )
-      : undefined
+      : undefined,
   );
 
   const extra = $derived(
-    query.current.data
-      ? JSON.stringify(query.current.data.extra, null, 2)
-      : undefined
+    query.current.data ? JSON.stringify(query.current.data.extra, null, 2) : "",
   );
 
   function handleCheckContour() {
@@ -69,18 +69,8 @@
     <div class="basis-400"><img {src} alt="" width="700" /></div>
     <div class="basis-1/3">
       <div class="flex flex-col items-center justify-center gap-4 h-full">
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mb-20 rounded"
-          onclick={handleCheckContour}>Refresh</button
-        >
-
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] rounded"
-          onclick={handleAccept}>Accept</button
-        >
-        <div class="text-sm text-gray-500">
-          <pre>{extra}</pre>
-        </div>
+        <VisionControl {handleCheckContour} {handleAccept}></VisionControl>
+        <VisionData data={extra} />
       </div>
     </div>
   </div>
