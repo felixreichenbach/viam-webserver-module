@@ -64,12 +64,13 @@
 {#if query.current.error}
   {query.current.error.message}
 {:else}
-  {console.log("refreshed")}
-  <div class="flex flex-row gap-20 m-4">
-    <div class="basis-400"><img {src} alt="" width="700" /></div>
-    <div class="basis-1/3">
+  <div class="grid grid-cols-2 min-w-[400px] border-0 border-red-500">
+    <div class="flex flex-col border-0 border-amber-300">
+      <div class=""><img {src} alt="" width="700" /></div>
+    </div>
+    <div class="flex flex-col border-2 border-purple-300">
       <div class="flex flex-col items-center justify-center gap-4 h-full">
-        <VisionControl {handleCheckContour} {handleAccept}></VisionControl>
+        <VisionControl {handleCheckContour} {handleAccept} />
         <VisionData data={extra} />
       </div>
     </div>
