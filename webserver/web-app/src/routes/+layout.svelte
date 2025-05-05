@@ -1,10 +1,9 @@
 <script lang="ts">
   import "../app.css";
   import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
-  import { ViamProvider, useConnectionStatus } from "$lib";
+  import { ViamProvider } from "$lib";
   import type { Snippet } from "svelte";
   import type { DialConf } from "@viamrobotics/sdk";
-  import Vision from "./components/vision.svelte";
 
   interface Props {
     children: Snippet;
@@ -16,20 +15,23 @@
   }
 
   let { data, children }: Props = $props();
+
+  function handleMenuClick() {
+    console.log("Menu button clicked");
+    // Add your menu handling logic here
+  }
 </script>
 
 <ViamProvider dialConfigs={data.dialConfig}>
   {console.log("data", data)}
-  <div
-    class="flex h-screen w-[1280px] flex-col gap-6 border-1 border-green-200 mx-auto"
-  >
-    <Vision
-      partID={Object.keys(data.dialConfig)[0]}
-      name={data.visionName}
-      cameraName={data.cameraName}
-    />
-    {@render children()}
+  <div class="flex flex-row min-h-[720px]">
+    <button
+      class="absolute top-0 right-0 m-4 bg-blue-200 text-white w-16 h-16"
+      onclick={handleMenuClick}>Menu</button
+    >
+    <div class="flex flex-col items-center">
+      {@render children()}
+    </div>
+    <SvelteQueryDevtools />
   </div>
-
-  <SvelteQueryDevtools />
 </ViamProvider>
