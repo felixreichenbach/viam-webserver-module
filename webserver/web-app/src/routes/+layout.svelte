@@ -4,6 +4,10 @@
   import { ViamProvider } from "$lib";
   import type { Snippet } from "svelte";
   import type { DialConf } from "@viamrobotics/sdk";
+  import { Hamburger } from "svelte-hamburgers";
+  import { fly } from "svelte/transition";
+
+  let open = $state(false);
 
   interface Props {
     children: Snippet;
@@ -26,10 +30,24 @@
 <ViamProvider dialConfigs={data.dialConfig}>
   {console.log("data", data)}
   <div class="flex flex-row min-h-[720px]">
-    <button
-      class="absolute top-0 right-0 m-4 bg-blue-200 text-white w-16 h-16"
-      onclick={handleMenuClick}>Menu</button
-    >
+    <nav class="absolute top-0 right-0 m-4 w-16 h-16">
+      <Hamburger
+        bind:open
+        type="collapse"
+        title="Toggle nav links"
+        ariaControls="nav"
+      />
+
+      {#if open}
+        <ul id="nav" class="menu" transition:fly={{ y: -15 }}>
+          <li><a href="/">Check</a></li>
+          <li><a href="/calibrate">Calibrate</a></li>
+          <li>
+            <a href="/" role="button" onclick={handleMenuClick}>Reload</a>
+          </li>
+        </ul>
+      {/if}
+    </nav>
     <div class="flex flex-col items-center">
       {@render children()}
     </div>
