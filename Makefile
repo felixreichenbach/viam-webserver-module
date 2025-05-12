@@ -9,8 +9,8 @@ build: format update-rdk
 	go build $(LDFLAGS) -o $(BIN_OUTPUT_PATH)/webserver main.go
 
 module.tar.gz: build
-	rm -f $(BIN_OUTPUT_PATH)/module.tar.gz
-	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver meta.json
+	rm -f module.tar.gz
+	tar czf module.tar.gz $(BIN_OUTPUT_PATH)/webserver meta.json
 
 clean:
 	rm -rf $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/module.tar.gz webserver $(BIN_OUTPUT_PATH)/web-app
