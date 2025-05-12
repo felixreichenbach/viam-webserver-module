@@ -1,27 +1,27 @@
-BIN_OUTPUT_PATH = bin
-TOOL_BIN = bin/gotools/$(shell uname -s)-$(shell uname -m)
-UNAME_S ?= $(shell uname -s)
-GOPATH = $(HOME)/go/bin
-export PATH := ${PATH}:$(GOPATH)
 
-build: format update-rdk
-	rm -f $(BIN_OUTPUT_PATH)/webserver
-	go build $(LDFLAGS) -o $(BIN_OUTPUT_PATH)/webserver main.go
+module.tar.gz: bin/webserver build/index.html meta.json
+	tar czf module.tar.gz bin/webserver meta.json
 
-module.tar.gz: build
-	rm -f module.tar.gz
-	tar czf module.tar.gz $(BIN_OUTPUT_PATH)/webserver meta.json
+bin/webserver: lint *.go cmd/module/*.go *.mod Makefile build/index.html
+	go build -o bin/webserver cmd/module/cmd.go
 
-clean:
-	rm -rf $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/module.tar.gz webserver $(BIN_OUTPUT_PATH)/web-app
+lint:
+	gofmt -w .
 
-format:
-	gofmt -w -s .
+node_modules: package.json
+	npm install
 
-update-rdk:
+build/index.html: *.json src/*.css src/*.ts src/routes/*.svelte src/lib/*.ts node_modules
+	npm run build
+
+updaterdk:
 	go get go.viam.com/rdk@latest
 	go mod tidy
 
-web:
-	cd webserver/web-app && npm install
-	cd webserver/web-app && npm run build
+clean:
+	rm -rf .svelte-kit
+	rm -rf bin
+	rm -rf build
+	rm -rf node_modules
+	rm -f module.tar.gz
+

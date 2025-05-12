@@ -1,4 +1,4 @@
-module webserver
+module github.com/felixreichenbach/web-app-module
 
 go 1.23.8
 

@@ -18,14 +18,14 @@ import (
 )
 
 var (
-	Webserver = resource.NewModel("hpe-automotive", "service", "sealant-check-ui")
+	Model = resource.NewModel("hpe-automotive", "service", "sealant-check-ui")
 )
 
-//go:embed web-app/build/*
+//go:embed build/*
 var staticFS embed.FS
 
 func init() {
-	resource.RegisterService(generic.API, Webserver,
+	resource.RegisterService(generic.API, Model,
 		resource.Registration[resource.Resource, *Config]{
 			Constructor: newWebserver,
 		},
@@ -97,7 +97,7 @@ func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resou
 		}
 	*/
 
-	fsToUse, err = fs.Sub(fsToUse, "web-app/build")
+	fsToUse, err = fs.Sub(fsToUse, "build")
 	if err != nil {
 		return nil, err
 	}
