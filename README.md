@@ -53,10 +53,6 @@ The following attributes are available for this model:
 }
 ```
 
-## Create Svelte template single page application
-
-See `my-app` folder
-
 ## TODO
 
 - [ ] wait for mdns support by the TypeScript SDK
