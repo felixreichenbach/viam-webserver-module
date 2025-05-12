@@ -1,4 +1,4 @@
-package webserver
+package sealantcheckui
 
 import (
 	"context"
@@ -18,14 +18,14 @@ import (
 )
 
 var (
-	Webserver = resource.NewModel("hpe-automotive", "service", "sealant-check-ui")
+	Model = resource.ModelNamespace("hpe-automotive").WithFamily("service").WithModel("sealant-check-ui")
 )
 
-//go:embed web-app/build/*
+//go:embed build
 var staticFS embed.FS
 
 func init() {
-	resource.RegisterService(generic.API, Webserver,
+	resource.RegisterService(generic.API, Model,
 		resource.Registration[resource.Resource, *Config]{
 			Constructor: newWebserver,
 		},

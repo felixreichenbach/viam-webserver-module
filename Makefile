@@ -1,27 +1,37 @@
-BIN_OUTPUT_PATH = bin
-TOOL_BIN = bin/gotools/$(shell uname -s)-$(shell uname -m)
-UNAME_S ?= $(shell uname -s)
-GOPATH = $(HOME)/go/bin
-export PATH := ${PATH}:$(GOPATH)
 
-build: format update-rdk
-	rm -f $(BIN_OUTPUT_PATH)/webserver
-	go build $(LDFLAGS) -o $(BIN_OUTPUT_PATH)/webserver main.go
+ifneq (,$(wildcard test.make))
+	include test.make
+    export $(shell sed 's/=.*//' test.make)
+endif
 
-module.tar.gz: build
-	rm -f $(BIN_OUTPUT_PATH)/module.tar.gz
-	tar czf $(BIN_OUTPUT_PATH)/module.tar.gz $(BIN_OUTPUT_PATH)/webserver meta.json
+module: bin/webserver
+	tar czf module.tar.gz bin/webserver meta.json
 
-clean:
-	rm -rf $(BIN_OUTPUT_PATH)/webserver $(BIN_OUTPUT_PATH)/module.tar.gz webserver $(BIN_OUTPUT_PATH)/web-app
+run: build/index.html  Makefile
+	go run cmd/run/cmd-run.go
 
-format:
-	gofmt -w -s .
+build/index.html: *.json src/*.css src/*.ts src/routes/*.svelte src/lib/*.ts node_modules
+	NODE_ENV=development npm run build
 
-update-rdk:
+lint:
+	gofmt -w .
+
+bin/webserver: bin *.go cmd/module/*.go *.mod Makefile build/index.html
+	go build -o bin/webserver cmd/module/cmd.go
+
+updaterdk:
 	go get go.viam.com/rdk@latest
 	go mod tidy
 
-web:
-	cd webserver/web-app && npm install
-	cd webserver/web-app && npm run build
+
+bin:
+	-mkdir bin
+
+node_modules: package.json
+	npm install
+
+clean:
+	rm -rf bin
+	rm -rf node_modules
+	rm -f module.tar.gz
+	rm -rf build
