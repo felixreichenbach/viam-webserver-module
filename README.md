@@ -2,9 +2,8 @@
 
 ## Use this module
 
-The module contains a Viam generic service which runs a http server pointing to the `my-app` directory. This directory contains a Svelte single page application created as explained here [Create Svelte Template App](## Create Svelte template single page application)
-
-Write your webapplication inside of `my-app`.
+The module contains a Viam generic service which runs a http server. The webserver points to the `build` directory which is created once you build the app `npm run build`.
+The `src` directory contains a Svelte single page application which can easily be replaced.
 
 ### Prerquisits
 
