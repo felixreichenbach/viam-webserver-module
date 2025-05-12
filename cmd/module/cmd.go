@@ -1,16 +1,16 @@
 package main
 
 import (
-	sealantcheckui "github.com/felixreichenbach/web-app-module"
+	webserver "github.com/felixreichenbach/web-app-module"
 
-	"go.viam.com/rdk/components/generic"
 	"go.viam.com/rdk/module"
 	"go.viam.com/rdk/resource"
+	"go.viam.com/rdk/services/generic"
 )
 
 func main() {
 	module.ModularMain(
-		resource.APIModel{API: generic.API, Model: sealantcheckui.Model},
+		resource.APIModel{API: generic.API, Model: webserver.Model},
 	)
 
 }

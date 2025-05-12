@@ -1,4 +1,4 @@
-package sealantcheckui
+package webserver
 
 import (
 	"context"
@@ -18,10 +18,10 @@ import (
 )
 
 var (
-	Model = resource.ModelNamespace("hpe-automotive").WithFamily("service").WithModel("sealant-check-ui")
+	Model = resource.NewModel("hpe-automotive", "service", "sealant-check-ui")
 )
 
-//go:embed build
+//go:embed build/*
 var staticFS embed.FS
 
 func init() {
