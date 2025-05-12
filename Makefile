@@ -12,7 +12,7 @@ node_modules: package.json
 	npm install
 
 build/index.html: *.json src/*.css src/*.ts src/routes/*.svelte src/lib/*.ts node_modules
-	npm run build
+#	npm run build disabled for cloud build
 
 updaterdk:
 	go get go.viam.com/rdk@latest

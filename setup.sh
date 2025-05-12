@@ -18,3 +18,7 @@ else
     echo "Node.js is already installed. Skipping installation."
     exit 0
 fi
+
+npm install
+
+npm run build
