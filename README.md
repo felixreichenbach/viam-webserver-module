@@ -1,59 +1,41 @@
-# Viam SPA Module
+# Viam Svelte Sample Application
 
-## Use this module
+This is an example of a Viam web application using Svelte. Feel free to create your own from scratch using the instructions here [`sv`](https://github.com/sveltejs/cli) or change the the example contained in this repository.
 
-The module contains a Viam generic service which runs a http server pointing to the `my-app` directory. This directory contains a Svelte single page application created as explained here [Create Svelte Template App](## Create Svelte template single page application)
+## Local Development
 
-Write your webapplication inside of `my-app`.
+To run the application locally you can provide machine credentials via the following VITE `.env`file:
 
-### Prerquisits
+````json
+VITE_CONFIGS='{"<- your part id ->": {
+  "host": "aaaaa.xxxxx.viam.cloud",
+  "credentials": {
+    "type": "api-key" ,
+    "payload": "xxxxxxx",
+    "authEntity": "xxxxxxx"
+  },
+  "signalingAddress": "https://app.viam.com:443"
+}}'
 
-1. Install [go](https://go.dev/doc/install)
-2. Install [node](https://nodejs.org/en/download/)
 
-### Local web application development
+Once you've created the `.env`file (optional) and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-```
-cd my-app
+```bash
 npm run dev
-```
 
-Build the Viam module:
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+````
 
-```
+## Building
+
+To create a production version of your app / module:
+
+```bash
 make module.tar.gz
 ```
 
-Add the path to `module.tar.gz` to your local Viam module configuration and start viam-server.
+## Adapter Configuration
 
-## Webserver module configuration
-
-### Attributes
-
-The following attributes are available for this model:
-
-| Name             | Type    | Inclusion | Description                                                     |
-| ---------------- | ------- | --------- | --------------------------------------------------------------- |
-| `camera_name`    | string  | Required  | Configure the name of the camera to be used.                    |
-| `vision_name`    | string  | Required  | Configure the name of the vision service to be used.            |
-| `port`           | integer | Optional  | Configure the port the webserver listens on. Default is `33333` |
-| `remote_address` | string  | Optional  | Configure the machine's remote address. Default is `localhost`  |
-
-### Example configuration:
-
-```json
-{
-  "camera_name": "name of the camera",
-  "vision_name": "name of the vision service",
-  "remote_address": "part.machine.viam.cloud",
-  "port": 33333
-}
-```
-
-## Create Svelte template single page application
-
-See `my-app` folder
-
-## TODO
-
-- [ ] wait for mdns support by the TypeScript SDK
+Changed in svelte.config.js to "@sveltejs/adapter-static"
+[adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
