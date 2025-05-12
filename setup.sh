@@ -10,9 +10,3 @@ else
     echo "Node.js is already installed. Skipping installation."
     exit 0
 fi
-
-
-cd webserver/web-app
-npm install
-npm run build
-
