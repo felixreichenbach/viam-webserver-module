@@ -19,9 +19,11 @@ npm install
 npm run dev
 ```
 
-Build the Viam module:
+Build the Viam module local:
 
 ```
+npm run build
+
 make module.tar.gz
 ```
 
