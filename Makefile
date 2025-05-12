@@ -11,7 +11,7 @@ run: build/index.html  Makefile
 	go run cmd/run/cmd-run.go
 
 build/index.html: *.json src/*.css src/*.ts src/routes/*.svelte src/lib/*.ts node_modules
-	NODE_ENV=development npm run build
+	npm run build
 
 lint:
 	gofmt -w .
