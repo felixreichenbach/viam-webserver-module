@@ -14,7 +14,8 @@ Write your webapplication inside of `my-app`.
 ### Local web application development
 
 ```
-cd my-app
+npm install
+
 npm run dev
 ```
 
