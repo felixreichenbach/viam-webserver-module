@@ -23,15 +23,13 @@ updaterdk:
 	go get go.viam.com/rdk@latest
 	go mod tidy
 
-
-bin:
-	-mkdir bin
-
 node_modules: package.json
 	npm install
 
 clean:
+	rm -rf .svelte-kit
 	rm -rf bin
+	rm -rf build
 	rm -rf node_modules
 	rm -f module.tar.gz
-	rm -rf build
+

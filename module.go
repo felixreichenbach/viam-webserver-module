@@ -97,7 +97,7 @@ func newWebserver(ctx context.Context, deps resource.Dependencies, rawConf resou
 		}
 	*/
 
-	fsToUse, err = fs.Sub(fsToUse, "web-app/build")
+	fsToUse, err = fs.Sub(fsToUse, "build")
 	if err != nil {
 		return nil, err
 	}

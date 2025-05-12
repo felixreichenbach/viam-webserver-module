@@ -1,6 +1,5 @@
 <script lang="ts">
   import "../app.css";
-  import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
   import { ViamProvider } from "$lib";
   import type { Snippet } from "svelte";
   import type { DialConf } from "@viamrobotics/sdk";
@@ -51,6 +50,5 @@
     <div class="flex flex-col items-center">
       {@render children()}
     </div>
-    <SvelteQueryDevtools />
   </div>
 </ViamProvider>
