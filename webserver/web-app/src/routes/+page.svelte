@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DialConf } from "@viamrobotics/sdk";
-  import Vision from "./components/vision.svelte";
+  import Vision from "../lib/vision.svelte";
 
   interface Props {
     data: {
