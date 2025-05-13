@@ -5,7 +5,6 @@ import (
 	"embed"
 	"io/fs"
 
-	"github.com/erh/vmodutils"
 	"go.viam.com/rdk/components/generic"
 	"go.viam.com/rdk/logging"
 	"go.viam.com/rdk/resource"
@@ -35,5 +34,5 @@ func newServer(ctx context.Context, deps resource.Dependencies, config resource.
 		return nil, err
 	}
 
-	return vmodutils.NewWebModuleAndStart(config.ResourceName(), fs, logger, config.Attributes.Int("port", 8888))
+	return NewWebModuleAndStart(config.ResourceName(), fs, logger, config.Attributes.Int("port", 8888))
 }
