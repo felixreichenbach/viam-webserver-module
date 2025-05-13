@@ -5,9 +5,9 @@ import (
 	"embed"
 	"io/fs"
 
-	"go.viam.com/rdk/components/generic"
 	"go.viam.com/rdk/logging"
 	"go.viam.com/rdk/resource"
+	"go.viam.com/rdk/services/generic"
 )
 
 //go:embed build/*
@@ -20,7 +20,7 @@ func DistFS() (fs.FS, error) {
 var Model = resource.NewModel("hpe-automotive", "service", "sealant-check-ui")
 
 func init() {
-	resource.RegisterComponent(
+	resource.RegisterService(
 		generic.API,
 		Model,
 		resource.Registration[resource.Resource, resource.NoNativeConfig]{
