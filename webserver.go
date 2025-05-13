@@ -1,5 +1,7 @@
 package webserver
 
+// Copied from here: https://github.com/erh/vmodutils/blob/main/web.go
+
 import (
 	"context"
 	"fmt"
