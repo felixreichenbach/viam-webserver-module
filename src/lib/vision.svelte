@@ -46,9 +46,7 @@
       : undefined
   );
 
-  const extra = $derived(
-    query.current.data ? JSON.stringify(query.current.data.extra, null, 2) : ""
-  );
+  const extra = $derived(query.current.data?.extra);
 
   function handleCheckContour() {
     query.current.refetch().then(() => {

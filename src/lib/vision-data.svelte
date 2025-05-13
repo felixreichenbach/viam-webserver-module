@@ -1,21 +1,29 @@
 <script lang="ts">
+  import type { Struct } from "@viamrobotics/sdk";
+
+  type Contour = {
+    hausdorf: number[];
+    area: number;
+    arcLength: number;
+  };
+
+  type VisionData = {
+    contours: Contour[];
+  };
+
   interface Props {
-    data: any;
+    data?: Struct;
   }
 
   let { data }: Props = $props();
+  $effect(() => console.log("VisionData", data));
+
+  //const refContours = data.contours;
+  //const detCountours = data.contours;
 
   let resultContours = $state("good");
   let resultArcLength = $state("bad");
   let resultArea = $state("");
-
-  function changeAreaColor(color: string) {
-    if (resultArea === "bad") {
-      resultArea = "good";
-    } else {
-      resultArea = "bad";
-    }
-  }
 </script>
 
 <div>
@@ -35,7 +43,7 @@
   @reference "tailwindcss";
   .result {
     background-color: rgb(255, 255, 255);
-    @apply w-60 h-25 border-2 flex justify-center items-center rounded;
+    @apply w-60 h-25 border-1 flex justify-center items-center rounded;
   }
   .result.bad {
     background-color: rgb(255, 0, 0);
