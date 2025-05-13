@@ -1,24 +1,25 @@
 export const prerender = false;
+export const ssr = false;
 
 import type { DialConf } from "@viamrobotics/sdk";
 import type { LayoutLoad } from "./$types";
+import { getCookie } from "typescript-cookie";
 
-export const load: LayoutLoad = async ({ fetch }) => {
-  let port: string;
-  if (typeof window !== "undefined") {
-    port = window.location.port;
-  } else {
-    // Provide a fallback or handle the case where `window` is not available
-    port = "33333"; // Default port or any other fallback logic
-  }
-  const res = await fetch(`http://localhost:${33333}/data.json`);
-  const data = await res.json();
-  const dialConfig: Record<string, DialConf> = data["dialConfig"] as Record<
-    string,
-    DialConf
-  >;
+export const load: LayoutLoad = function () {
+  const dc: DialConf = {
+    host: getCookie("host") ?? "",
+    credentials: {
+      authEntity: getCookie("api-key-id") ?? "",
+      type: "api-key",
+      payload: getCookie("api-key") ?? "",
+    },
+    signalingAddress: "https://app.viam.com:443",
+  };
 
-  const cameraName = data.webConfig["cameraName"] as string;
-  const visionName = data.webConfig["visionName"] as string;
+  const partid = getCookie("part-id") ?? "";
+  const dialConfig: Record<string, DialConf> = { [partid]: dc };
+
+  const cameraName = "camera-transform" as string;
+  const visionName = "vision" as string;
   return { dialConfig, cameraName, visionName };
 };

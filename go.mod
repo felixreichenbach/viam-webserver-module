@@ -4,10 +4,7 @@ go 1.23.8
 
 toolchain go1.24.2
 
-require (
-	go.viam.com/rdk v0.74.0
-	go.viam.com/utils v0.1.142
-)
+require go.viam.com/rdk v0.74.0
 
 require (
 	cloud.google.com/go v0.115.1 // indirect
@@ -22,7 +19,7 @@ require (
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/bluenviron/gortsplib/v4 v4.8.0 // indirect
 	github.com/bufbuild/protocompile v0.9.0 // indirect
-	github.com/bytedance/sonic v1.12.8 // indirect
+	github.com/bytedance/sonic v1.13.2 // indirect
 	github.com/campoy/embedmd v1.0.0 // indirect
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
@@ -127,6 +124,7 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	go.viam.com/api v0.1.432 // indirect
 	go.viam.com/test v1.2.4 // indirect
+	go.viam.com/utils v0.1.142 // indirect
 	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e // indirect
 	golang.org/x/image v0.19.0 // indirect
