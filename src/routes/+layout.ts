@@ -12,6 +12,7 @@ export const load: LayoutLoad = function () {
       type: "api-key",
       payload: getCookie("api-key") ?? "",
     },
+    signalingAddress: "https://app.viam.com:443",
   };
 
   const partid = getCookie("part-id") ?? "";
