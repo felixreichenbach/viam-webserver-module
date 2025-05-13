@@ -1,3 +1,4 @@
+export const prerender = false;
 export const ssr = false;
 
 import type { DialConf } from "@viamrobotics/sdk";
@@ -18,7 +19,7 @@ export const load: LayoutLoad = function () {
   const partid = getCookie("part-id") ?? "";
   const dialConfig: Record<string, DialConf> = { [partid]: dc };
 
-  const cameraName = "camera" as string;
+  const cameraName = "camera-transform" as string;
   const visionName = "vision" as string;
   return { dialConfig, cameraName, visionName };
 };

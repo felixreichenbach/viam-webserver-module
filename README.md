@@ -36,18 +36,12 @@ The following attributes are available for this model:
 
 | Name             | Type    | Inclusion | Description                                                     |
 | ---------------- | ------- | --------- | --------------------------------------------------------------- |
-| `camera_name`    | string  | Required  | Configure the name of the camera to be used.                    |
-| `vision_name`    | string  | Required  | Configure the name of the vision service to be used.            |
-| `port`           | integer | Optional  | Configure the port the webserver listens on. Default is `33333` |
-| `remote_address` | string  | Optional  | Configure the machine's remote address. Default is `localhost`  |
+| `port`           | integer | Optional  | Configure the port the webserver listens on. Default is `8888` |
 
 ### Example configuration:
 
 ```json
 {
-  "camera_name": "name of the camera",
-  "vision_name": "name of the vision service",
-  "remote_address": "part.machine.viam.cloud",
   "port": 33333
 }
 ```
