@@ -68,7 +68,7 @@
     <div class="flex flex-col border-0 border-amber-300">
       <div class=""><img {src} alt="" width="700" /></div>
     </div>
-    <div class="flex flex-col border-2 border-purple-300">
+    <div class="flex flex-col border-0 border-purple-300">
       <div class="flex flex-col items-center justify-center gap-4 h-full">
         <VisionControl {handleCheckContour} {handleAccept} />
         <VisionData data={extra} />
