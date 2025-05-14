@@ -44,7 +44,9 @@ The following attributes are available for this model:
 
 ```json
 {
-  "port": 33333
+  "port": 33333,
+  "camera":"camera",
+  "vision":"vision"
 }
 ```
 
