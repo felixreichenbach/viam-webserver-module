@@ -46,7 +46,7 @@
       : undefined
   );
 
-  const extra = $derived(query.current.data?.extra);
+  const data = $derived(query.current.data);
 
   function handleCheckContour() {
     query.current.refetch().then(() => {
@@ -69,7 +69,7 @@
     <div class="flex flex-col border-0 border-purple-300">
       <div class="flex flex-col items-center justify-center gap-4 h-full">
         <VisionControl {handleCheckContour} {handleAccept} />
-        <VisionData data={extra} />
+        <VisionData {data} />
       </div>
     </div>
   </div>
