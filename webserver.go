@@ -4,6 +4,7 @@ package webserver
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io/fs"
 	"net/http"
@@ -14,7 +15,7 @@ import (
 	"go.viam.com/rdk/utils"
 )
 
-func PrepInModuleServer(fs fs.FS, accessLog logging.Logger) (*http.ServeMux, *http.Server, error) {
+func PrepInModuleServer(cfg resource.Config, fs fs.FS, accessLog logging.Logger) (*http.ServeMux, *http.Server, error) {
 
 	f, err := fs.Open("index.html")
 	if err != nil {
@@ -25,6 +26,19 @@ func PrepInModuleServer(fs fs.FS, accessLog logging.Logger) (*http.ServeMux, *ht
 	mux := http.NewServeMux()
 
 	mux.Handle("/", http.FileServerFS(fs))
+
+	mux.HandleFunc("/config.json", func(w http.ResponseWriter, r *http.Request) {
+		json, err := json.Marshal(cfg)
+		if err != nil {
+			accessLog.Error("error marshalling data %v", err)
+			http.Error(w, fmt.Sprintf("Internal Server Error: Config File Invalid %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header()["Content-Type"] = []string{"application/json"}
+		w.Header()["Access-Control-Allow-Origin"] = []string{"*"}
+		w.Write(json)
+	})
 
 	webServer := &http.Server{}
 	webServer.Handler = newCookieSetter(&loggingHandler{mux, accessLog}, accessLog)
@@ -79,8 +93,8 @@ func (lh *loggingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // ----
 
-func NewWebModuleAndStart(name resource.Name, fs fs.FS, logger logging.Logger, port int) (resource.Resource, error) {
-	m, err := NewWebModule(name, fs, logger)
+func NewWebModuleAndStart(cfg resource.Config, fs fs.FS, logger logging.Logger, port int) (resource.Resource, error) {
+	m, err := NewWebModule(cfg, fs, logger)
 	if err != nil {
 		return nil, err
 	}
@@ -93,16 +107,16 @@ func NewWebModuleAndStart(name resource.Name, fs fs.FS, logger logging.Logger, p
 	return m, nil
 }
 
-func NewWebModule(name resource.Name, fs fs.FS, logger logging.Logger) (*webModule, error) {
+func NewWebModule(cfg resource.Config, fs fs.FS, logger logging.Logger) (*webModule, error) {
 	accessLog := logger.Sublogger("accessLog")
 
-	_, s, err := PrepInModuleServer(fs, accessLog)
+	_, s, err := PrepInModuleServer(cfg, fs, accessLog)
 	if err != nil {
 		return nil, err
 	}
 
 	wm := &webModule{
-		name:   name,
+		cfg:    cfg,
 		server: s,
 		logger: logger,
 	}
@@ -113,7 +127,7 @@ func NewWebModule(name resource.Name, fs fs.FS, logger logging.Logger) (*webModu
 type webModule struct {
 	resource.AlwaysRebuild
 
-	name   resource.Name
+	cfg    resource.Config
 	logger logging.Logger
 
 	server *http.Server
@@ -132,7 +146,7 @@ func (wm *webModule) Start(port int) error {
 }
 
 func (wm *webModule) Name() resource.Name {
-	return wm.name
+	return wm.cfg.ResourceName()
 }
 
 func (wm *webModule) Close(ctx context.Context) error {

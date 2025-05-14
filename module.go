@@ -34,5 +34,5 @@ func newServer(ctx context.Context, deps resource.Dependencies, config resource.
 		return nil, err
 	}
 
-	return NewWebModuleAndStart(config.ResourceName(), fs, logger, config.Attributes.Int("port", 8888))
+	return NewWebModuleAndStart(config, fs, logger, config.Attributes.Int("port", 8888))
 }
