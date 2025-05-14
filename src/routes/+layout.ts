@@ -18,7 +18,8 @@ export const load: LayoutLoad = async ({ fetch }) => {
   const partid = getCookie("part-id") ?? "";
   const dialConfig: Record<string, DialConf> = { [partid]: dc };
 
-  const res = await fetch(`http://localhost:${8888}/config.json`);
+  const port = window.location.port;
+  const res = await fetch(`http://localhost:${port}/config.json`);
   const cfg = await res.json();
   const cameraName = cfg.attributes.camera as string;
   const visionName = cfg.attributes.vision as string;
