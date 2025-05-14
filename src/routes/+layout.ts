@@ -5,7 +5,7 @@ import type { DialConf } from "@viamrobotics/sdk";
 import type { LayoutLoad } from "./$types";
 import { getCookie } from "typescript-cookie";
 
-export const load: LayoutLoad = function () {
+export const load: LayoutLoad = async ({ fetch }) => {
   const dc: DialConf = {
     host: getCookie("host") ?? "",
     credentials: {
@@ -15,11 +15,13 @@ export const load: LayoutLoad = function () {
     },
     signalingAddress: "https://app.viam.com:443",
   };
-
   const partid = getCookie("part-id") ?? "";
   const dialConfig: Record<string, DialConf> = { [partid]: dc };
 
-  const cameraName = "camera-transform" as string;
-  const visionName = "vision" as string;
+  const res = await fetch(`http://localhost:${8888}/config.json`);
+  const cfg = await res.json();
+  const cameraName = cfg.attributes.camera as string;
+  const visionName = cfg.attributes.vision as string;
+
   return { dialConfig, cameraName, visionName };
 };
