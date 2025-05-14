@@ -1,25 +1,31 @@
 <script lang="ts">
-  import type { Struct } from "@viamrobotics/sdk";
-
-  type Contour = {
-    hausdorf: number[];
-    area: number;
-    arcLength: number;
-  };
-
-  type VisionData = {
-    contours: Contour[];
-  };
+  import {
+    Detection,
+    type Classification,
+    type PointCloudObject,
+    type Struct,
+  } from "@viamrobotics/sdk";
 
   interface Props {
-    data?: Struct;
+    data:
+      | {
+          image: any;
+          classifications: Classification[];
+          detections: Detection[];
+          objectPointClouds: PointCloudObject[];
+          extra: Struct | undefined;
+        }
+      | undefined;
   }
 
-  let { data }: Props = $props();
-  $effect(() => console.log("VisionData", data));
-
-  //const refContours = data.contours;
-  //const detCountours = data.contours;
+  let props: Props = $props();
+  let { detections, extra } = $derived(
+    props.data ?? { detections: [], extra: undefined }
+  );
+  $effect(() => {
+    console.log("detections", detections);
+    console.log("extra", extra);
+  });
 
   let resultContours = $state("good");
   let resultArcLength = $state("bad");
