@@ -37,6 +37,8 @@ The following attributes are available for this model:
 | Name             | Type    | Inclusion | Description                                                     |
 | ---------------- | ------- | --------- | --------------------------------------------------------------- |
 | `port`           | integer | Optional  | Configure the port the webserver listens on. Default is `8888` |
+| `camera`           | string | Required  | The name of the camera you want to use with the vision service|
+| `vision`           | string | Required  | The name of the vision service you want to use with the camera|
 
 ### Example configuration:
 
