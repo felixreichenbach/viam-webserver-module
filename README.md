@@ -50,6 +50,22 @@ The following attributes are available for this model:
 }
 ```
 
+## Less obvious features
+
+You can access the Viam configuration in your frontend code using the `http://.../config.json` endpoint.
+
+```json
+{
+    "name": "ui",
+    "api": "rdk:service:generic",
+    "model": "hpe-automotive:service:sealant-check-ui",
+    "attributes": {
+        "camera": "sealant-defect",
+        "vision": "vision"
+    }
+}
+```
+
 ## TODO
 
 - [ ] wait for mdns support by the TypeScript SDK
