@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { createResourceClient, createResourceQuery } from "$lib";
+  import {
+    createResourceClient,
+    createResourceMutation,
+    createResourceQuery,
+  } from "$lib";
   import VisionControl from "$lib/vision-control.svelte";
   import VisionData from "$lib/vision-data.svelte";
-  import { VisionClient } from "@viamrobotics/sdk";
+  import { VisionClient, Struct } from "@viamrobotics/sdk";
 
   interface Props {
     partID: string;
@@ -38,6 +42,11 @@
     () => queryOptions // options
   );
 
+  const tagImage = createResourceMutation(
+    visionClient, // client
+    "doCommand" // method
+  );
+
   const src = $derived(
     query.current.data
       ? URL.createObjectURL(
@@ -47,6 +56,10 @@
   );
 
   const data = $derived(query.current.data);
+  const imgUUID = $derived(
+    query.current.data?.extra &&
+      (query.current.data.extra.toJson() as any)["id"]
+  );
 
   function handleCheckContour() {
     query.current.refetch().then(() => {
@@ -56,6 +69,13 @@
 
   function handleAccept() {
     console.log("Button Accept: To be implemented");
+    tagImage.current.mutate([
+      Struct.fromJson({
+        command: "upload_image",
+        img_id: imgUUID as string,
+      }),
+    ]); // Replace with actual data
+    console.log("tagImage", imgUUID);
   }
 </script>
 
