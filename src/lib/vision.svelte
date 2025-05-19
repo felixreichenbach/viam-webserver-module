@@ -42,7 +42,7 @@
     () => queryOptions // options
   );
 
-  const tagImage = createResourceMutation(
+  const mutation = createResourceMutation(
     visionClient, // client
     "doCommand" // method
   );
@@ -63,19 +63,27 @@
 
   function handleCheckContour() {
     query.current.refetch().then(() => {
-      console.log("contour refreshed");
+      mutation.current.reset();
     });
   }
 
   function handleAccept() {
-    console.log("Button Accept: To be implemented");
-    tagImage.current.mutate([
-      Struct.fromJson({
-        command: "upload_image",
-        img_id: imgUUID as string,
-      }),
-    ]); // Replace with actual data
-    console.log("tagImage", imgUUID);
+    mutation.current.mutate(
+      [
+        Struct.fromJson({
+          command: "upload_image",
+          img_id: imgUUID as string,
+        }),
+      ],
+      {
+        onSuccess: () => {
+          console.log("tagImage", imgUUID);
+        },
+        onError(error, variables, context) {
+          console.error("Error saving image:", error);
+        },
+      }
+    );
   }
 </script>
 
@@ -89,7 +97,18 @@
     <div class="flex flex-col border-0 border-purple-300">
       <div class="flex flex-col items-center justify-center gap-4 h-full">
         <VisionControl {handleCheckContour} {handleAccept} />
-        <VisionData {data} />
+        {#if mutation.current.isSuccess}
+          <div class="flex flex-col items-center justify-center gap-4 h-full">
+            <h1 class="text-3xl font-bold">Image Saved</h1>
+          </div>
+        {:else if mutation.current.isError}
+          <div class="flex flex-col items-center justify-center gap-4 h-full">
+            <h1 class="text-3xl font-bold">Error Saving Image</h1>
+            <p>{mutation.current.error.message}</p>
+          </div>
+        {:else}
+          <VisionData {data} />
+        {/if}
       </div>
     </div>
   </div>
