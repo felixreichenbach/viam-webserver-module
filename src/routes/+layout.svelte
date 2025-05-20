@@ -19,9 +19,7 @@
 
   let { data, children }: Props = $props();
 
-  function handleMenuClick() {
-    console.log("Menu button clicked");
-    // Add your menu handling logic here
+  function reloadPage() {
     location.reload();
   }
 </script>
@@ -42,7 +40,7 @@
           <li><a href="/">Check</a></li>
           <li><a href="/calibrate">Calibrate</a></li>
           <li>
-            <a href="/" role="button" onclick={handleMenuClick}>Reload</a>
+            <a href="/" role="button" onclick={reloadPage}>Reload</a>
           </li>
         </ul>
       {/if}
