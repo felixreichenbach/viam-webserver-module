@@ -14,6 +14,7 @@
       dialConfig: Record<string, DialConf>;
       cameraName: string;
       visionName: string;
+      thresholds: Record<string, number>;
     };
   }
 

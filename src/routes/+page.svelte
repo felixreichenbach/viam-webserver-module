@@ -7,6 +7,7 @@
       dialConfig: Record<string, DialConf>;
       cameraName: string;
       visionName: string;
+      thresholds: Record<string, number>;
     };
   }
 
@@ -17,4 +18,5 @@
   partID={Object.keys(data.dialConfig)[0]}
   name={data.visionName}
   cameraName={data.cameraName}
+  thresholds={data.thresholds}
 />

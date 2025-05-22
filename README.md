@@ -34,19 +34,28 @@ Add the path to `module.tar.gz` to your local Viam module configuration and star
 
 The following attributes are available for this model:
 
-| Name             | Type    | Inclusion | Description                                                     |
-| ---------------- | ------- | --------- | --------------------------------------------------------------- |
-| `port`           | integer | Optional  | Configure the port the webserver listens on. Default is `8888` |
-| `camera`           | string | Required  | The name of the camera you want to use with the vision service|
-| `vision`           | string | Required  | The name of the vision service you want to use with the camera|
+| Name                | Type    | Inclusion | Description                                                                         |
+| ------------------- | ------- | --------- | ----------------------------------------------------------------------------------- |
+| `port`              | integer | Optional  | Configure the port the webserver listens on. Default is `8888`                      |
+| `camera`            | string  | Required  | The name of the camera you want to use with the vision service                      |
+| `vision`            | string  | Required  | The name of the vision service you want to use with the camera                      |
+| `thresholds`        | object  | Optional  | Holds threshold values for area, length and shape                                   |
+| `thresholds.area`   | integer | Optional  | Acceptable difference betwenn detected area and reference area. Defaults to `0`     |
+| `thresholds.length` | integer | Optional  | Acceptable difference betwenn detected length and reference length. Defaults to `0` |
+| `thresholds.shape`  | integer | Optional  | Acceptable difference betwenn detected shape and reference shape. Defaults to `0`   |
 
 ### Example configuration:
 
 ```json
 {
   "port": 33333,
-  "camera":"camera",
-  "vision":"vision"
+  "camera": "camera",
+  "vision": "vision",
+  "thresholds": {
+    "area": 100,
+    "length": 100,
+    "shape": 100
+  }
 }
 ```
 
@@ -56,13 +65,13 @@ You can access the Viam configuration in your frontend code using the `http://..
 
 ```json
 {
-    "name": "ui",
-    "api": "rdk:service:generic",
-    "model": "hpe-automotive:service:sealant-check-ui",
-    "attributes": {
-        "camera": "sealant-defect",
-        "vision": "vision"
-    }
+  "name": "ui",
+  "api": "rdk:service:generic",
+  "model": "hpe-automotive:service:sealant-check-ui",
+  "attributes": {
+    "camera": "sealant-defect",
+    "vision": "vision"
+  }
 }
 ```
 
@@ -73,7 +82,6 @@ Example:
 ```sh
 viam module build start --version 0.1.5-rc5
 ```
-
 
 ## TODO
 
