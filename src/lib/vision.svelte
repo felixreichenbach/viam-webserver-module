@@ -4,7 +4,6 @@
     createResourceMutation,
     createResourceQuery,
   } from "$lib";
-  import VisionControl from "$lib/vision-control.svelte";
   import VisionData from "$lib/vision-data.svelte";
   import { VisionClient, Struct } from "@viamrobotics/sdk";
 
@@ -42,7 +41,7 @@
     () => queryOptions // options
   );
 
-  const tagImage = createResourceMutation(
+  const mutation = createResourceMutation(
     visionClient, // client
     "doCommand" // method
   );
@@ -63,19 +62,28 @@
 
   function handleCheckContour() {
     query.current.refetch().then(() => {
-      console.log("contour refreshed");
+      mutation.current.reset();
     });
   }
 
   function handleAccept() {
-    console.log("Button Accept: To be implemented");
-    tagImage.current.mutate([
-      Struct.fromJson({
-        command: "upload_image",
-        img_id: imgUUID as string,
-      }),
-    ]); // Replace with actual data
-    console.log("tagImage", imgUUID);
+    mutation.current.mutate(
+      [
+        Struct.fromJson({
+          command: "upload_image",
+          img_id: imgUUID as string,
+        }),
+      ],
+      // Optional callback functions as example:
+      {
+        onSuccess: () => {
+          console.log("Upload Image: ", imgUUID);
+        },
+        onError(error, variables, context) {
+          console.error("Error saving image:", error);
+        },
+      }
+    );
   }
 </script>
 
@@ -84,13 +92,44 @@
 {:else}
   <div class="grid grid-cols-2 min-w-[400px] border-0 border-red-500">
     <div class="flex flex-col border-0 border-amber-300">
-      <div class=""><img {src} alt="" width="700" /></div>
+      <div class="">
+        <img
+          {src}
+          alt=""
+          width="700"
+          style="object-fit: contain; max-height: 720px;"
+        />
+      </div>
     </div>
     <div class="flex flex-col border-0 border-purple-300">
       <div class="flex flex-col items-center justify-center gap-4 h-full">
-        <VisionControl {handleCheckContour} {handleAccept} />
-        <VisionData {data} />
+        <button onclick={handleCheckContour}>Refresh</button>
+        <button onclick={handleAccept} disabled={mutation.current.isSuccess}
+          >Accept</button
+        >
+        {#if mutation.current.isSuccess}
+          <div class="flex flex-col items-center justify-center gap-4 h-full">
+            <h1 class="text-3xl font-bold">Image Saved</h1>
+          </div>
+        {:else if mutation.current.isError}
+          <div class="flex flex-col items-center justify-center gap-4 h-full">
+            <h1 class="text-3xl font-bold">Error Saving Image</h1>
+            <p>{mutation.current.error.message}</p>
+          </div>
+        {:else}
+          <VisionData {data} />
+        {/if}
       </div>
     </div>
   </div>
 {/if}
+
+<style lang="postcss">
+  @reference "tailwindcss";
+  button {
+    @apply w-70 h-30 border-2 flex justify-center items-center rounded bg-blue-500 hover:bg-blue-700 text-xl text-white font-bold py-[50px] px-[100px] mt-4;
+  }
+  button:disabled {
+    @apply bg-gray-400 cursor-not-allowed opacity-60 hover:bg-gray-400;
+  }
+</style>
