@@ -4,6 +4,7 @@ export type Contour = {
   hausdorff?: { [key: string]: number };
 };
 
+// TODO: Provide threshold values for length, area, and shape from Viam configuration
 export const checkContours = (ref_contours: Contour[], contours: Contour[]) => {
   let result = { length: "", area: "", shape: "" };
   if (ref_contours && ref_contours.length == contours.length) {
