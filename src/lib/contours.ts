@@ -5,7 +5,11 @@ export type Contour = {
 };
 
 // TODO: Provide threshold values for length, area, and shape from Viam configuration
-export const checkContours = (ref_contours: Contour[], contours: Contour[]) => {
+export const checkContours = (
+  ref_contours: Contour[],
+  contours: Contour[],
+  thresholds: Record<string, number>
+) => {
   let result = { length: "", area: "", shape: "" };
   if (ref_contours && ref_contours.length == contours.length) {
     for (const [rci, refcont] of ref_contours.entries()) {
@@ -15,11 +19,14 @@ export const checkContours = (ref_contours: Contour[], contours: Contour[]) => {
           ci,
           Math.abs(refcont.arclength - contour.arclength)
         );
-        if (Math.abs(refcont.arclength - contour.arclength) < 100) {
+        if (
+          Math.abs(refcont.arclength - contour.arclength) <
+          (thresholds?.length || 0)
+        ) {
           result["length"] = "good";
         }
         console.log("diff area", Math.abs(refcont.area - contour.area));
-        if (Math.abs(refcont.area - contour.area) < 100) {
+        if (Math.abs(refcont.area - contour.area) < (thresholds?.area || 0)) {
           result["area"] = "good";
         }
         if (contour.hausdorff) {
@@ -30,7 +37,10 @@ export const checkContours = (ref_contours: Contour[], contours: Contour[]) => {
               ? contour.hausdorff[key]
               : undefined;
             console.log("diff hausdorff", hausdorffValue);
-            if (hausdorffValue !== undefined && hausdorffValue < 100) {
+            if (
+              hausdorffValue !== undefined &&
+              hausdorffValue < (thresholds?.shape || 0)
+            ) {
               result["shape"] = "good";
             }
           });

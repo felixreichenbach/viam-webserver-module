@@ -23,6 +23,7 @@ export const load: LayoutLoad = async ({ fetch }) => {
   const cfg = await res.json();
   const cameraName = cfg.attributes.camera as string;
   const visionName = cfg.attributes.vision as string;
+  const thresholds = cfg.attributes.thresholds as Record<string, number>;
 
-  return { dialConfig, cameraName, visionName };
+  return { dialConfig, cameraName, visionName, thresholds };
 };

@@ -11,9 +11,10 @@
     partID: string;
     name: string;
     cameraName: string;
+    thresholds: Record<string, number>;
   }
 
-  let { partID, name: name, cameraName }: Props = $props();
+  let { partID, name: name, cameraName, thresholds }: Props = $props();
 
   const visionClient = createResourceClient(
     VisionClient,
@@ -104,7 +105,9 @@
     <div class="flex flex-col border-0 border-purple-300">
       <div class="flex flex-col items-center justify-center gap-4 h-full">
         <button onclick={handleCheckContour}>Refresh</button>
-        <button onclick={handleAccept} disabled={mutation.current.isSuccess}
+        <button
+          onclick={handleAccept}
+          disabled={mutation.current.isSuccess || imgUUID == undefined}
           >Accept</button
         >
         {#if mutation.current.isSuccess}
@@ -117,7 +120,7 @@
             <p>{mutation.current.error.message}</p>
           </div>
         {:else}
-          <VisionData {data} />
+          <VisionData {data} {thresholds} />
         {/if}
       </div>
     </div>

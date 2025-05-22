@@ -17,6 +17,7 @@
           extra: Struct | undefined;
         }
       | undefined;
+    thresholds: Record<string, number>;
   }
 
   type Extra = {
@@ -28,20 +29,41 @@
   let extra = $derived(props.data?.extra?.toJson() as Extra | undefined);
 
   let result = $derived(
-    checkContours(extra?.ref_contours ?? [], extra?.contours ?? [])
+    checkContours(
+      extra?.ref_contours ?? [],
+      extra?.contours ?? [],
+      props.thresholds
+    )
   );
 </script>
 
 <div>
   <div id="arclength" class="result {result['length']} mb-4">
-    <span class="text-3xl font-bold">Length</span>
+    <span
+      class="text-3xl font-bold flex flex-col items-center justify-center w-full"
+    >
+      Length<br />
+      <span class="text-base">
+        threshold: {props.thresholds?.length ?? "missing!"}
+      </span>
+    </span>
   </div>
   <div id="area" class="result {result['area']} mb-4">
-    <span class="text-3xl flex justify-center items-center font-bold">Area</span
-    >
+    <span
+      class="text-3xl font-bold flex flex-col items-center justify-center w-full"
+      >Area<br />
+      <span class="text-base">
+        threshold: {props.thresholds?.area ?? "missing!"}
+      </span>
+    </span>
   </div>
   <div id="contours" class="result {result['shape']}">
-    <span class="text-3xl font-bold">Shape</span>
+    <span class="text-3xl font-bold"
+      >Shape<br />
+      <span class="text-base">
+        threshold: {props.thresholds?.shape ?? "missing!"}
+      </span>
+    </span>
   </div>
 </div>
 
@@ -56,5 +78,8 @@
   }
   .result.good {
     background-color: rgb(0, 255, 0);
+  }
+  .text-base {
+    font-weight: normal;
   }
 </style>
