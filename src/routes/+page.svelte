@@ -7,6 +7,7 @@
   import VisionData from "$lib/vision-data.svelte";
   import { VisionClient, Struct } from "@viamrobotics/sdk";
   import type { DialConf } from "@viamrobotics/sdk";
+  import { appMode } from "$lib/stores";
 
   interface Props {
     data: {
@@ -17,8 +18,6 @@
     };
   }
   let { data: props }: Props = $props();
-
-  console.log("Vision Page Props:", props);
 
   const visionClient = createResourceClient(
     VisionClient,
@@ -95,6 +94,7 @@
 {#if query.current.error}
   {query.current.error.message}
 {:else}
+  <p>{$appMode}</p>
   <div class="grid grid-cols-2 min-w-[400px] border-0 border-red-500">
     <div class="flex flex-col border-0 border-amber-300">
       <div class="">
