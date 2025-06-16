@@ -7,11 +7,12 @@
   import { fly } from "svelte/transition";
 
   import { appMode } from "$lib/stores";
+  import { AppMode } from "$lib/stores";
 
   function toggleAppMode() {
-    // The .update() method takes a callback that receives the current
-    // store value (currentValue) and returns the new value.
-    appMode.update((currentValue) => !currentValue);
+    appMode.update((currentValue) =>
+      currentValue === AppMode.Default ? AppMode.Calibrate : AppMode.Default
+    );
   }
 
   let open = $state(false);
@@ -45,9 +46,10 @@
 
       {#if open}
         <ul id="nav" class="menu" transition:fly={{ y: -15 }}>
-          <li><a href="/">Check</a></li>
           <li>
-            <a href="/" role="button" onclick={toggleAppMode}>Calibrate</a>
+            <a href="/" role="button" onclick={toggleAppMode}
+              >{$appMode == AppMode.Calibrate ? "Verify" : "Calibrate"}</a
+            >
           </li>
           <li>
             <a href="/" role="button" onclick={reloadPage}>Reload</a>

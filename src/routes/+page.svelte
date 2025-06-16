@@ -7,7 +7,7 @@
   import VisionData from "$lib/vision-data.svelte";
   import { VisionClient, Struct } from "@viamrobotics/sdk";
   import type { DialConf } from "@viamrobotics/sdk";
-  import { appMode } from "$lib/stores";
+  import { AppMode, appMode } from "$lib/stores";
 
   interface Props {
     data: {
@@ -64,6 +64,8 @@
       (query.current.data.extra.toJson() as any)["id"]
   );
 
+  let message: string | undefined = $state(undefined);
+
   function handleCheckContour() {
     query.current.refetch().then(() => {
       mutation.current.reset();
@@ -71,6 +73,14 @@
   }
 
   function handleAccept() {
+    if ($appMode === AppMode.Calibrate) {
+      saveContours();
+    } else {
+      saveImage();
+    }
+  }
+
+  function saveImage() {
     mutation.current.mutate(
       [
         Struct.fromJson({
@@ -82,9 +92,33 @@
       {
         onSuccess: () => {
           console.log("Upload Image: ", imgUUID);
+          message = "Image saved successfully!";
         },
         onError(error, variables, context) {
           console.error("Error saving image:", error);
+          message = "Error saving image: " + error.message;
+        },
+      }
+    );
+  }
+
+  function saveContours() {
+    mutation.current.mutate(
+      [
+        Struct.fromJson({
+          command: "save_contours",
+          camera_name: props.cameraName,
+        }),
+      ],
+      // Optional callback functions as example:
+      {
+        onSuccess: () => {
+          console.log("Reference contours saved!");
+          message = "Reference contours saved successfully!";
+        },
+        onError(error, variables, context) {
+          console.error("Error saving reference contours: ", error);
+          message = "Error saving reference contours: " + error.message;
         },
       }
     );
@@ -94,7 +128,6 @@
 {#if query.current.error}
   {query.current.error.message}
 {:else}
-  <p>{$appMode}</p>
   <div class="grid grid-cols-2 min-w-[400px] border-0 border-red-500">
     <div class="flex flex-col border-0 border-amber-300">
       <div class="">
@@ -106,9 +139,16 @@
         />
       </div>
     </div>
-    <div class="flex flex-col border-0 border-purple-300">
+    <div class="flex flex-col border-2 border-purple-300">
+      {#if $appMode == AppMode.Calibrate}
+        <p>Calibration</p>
+      {:else}
+        <p>Verification</p>
+      {/if}
       <div class="flex flex-col items-center justify-center gap-4 h-full">
-        <button onclick={handleCheckContour}>Refresh</button>
+        <button onclick={handleCheckContour}>
+          {$appMode == AppMode.Calibrate ? "Calibrate" : "Check"}</button
+        >
         <button
           onclick={handleAccept}
           disabled={mutation.current.isSuccess || imgUUID == undefined}
@@ -116,11 +156,11 @@
         >
         {#if mutation.current.isSuccess}
           <div class="flex flex-col items-center justify-center gap-4 h-full">
-            <h1 class="text-3xl font-bold">Image Saved</h1>
+            <h1 class="text-3xl font-bold">{message}</h1>
           </div>
         {:else if mutation.current.isError}
           <div class="flex flex-col items-center justify-center gap-4 h-full">
-            <h1 class="text-3xl font-bold">Error Saving Image</h1>
+            <h1 class="text-3xl font-bold">{message}</h1>
             <p>{mutation.current.error.message}</p>
           </div>
         {:else}
@@ -138,5 +178,8 @@
   }
   button:disabled {
     @apply bg-gray-400 cursor-not-allowed opacity-60 hover:bg-gray-400;
+  }
+  p {
+    @apply text-center font-bold text-2xl mt-4;
   }
 </style>
