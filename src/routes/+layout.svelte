@@ -35,7 +35,7 @@
 </script>
 
 <ViamProvider dialConfigs={data.dialConfig}>
-  <div class="flex flex-row min-h-[720px]">
+  <div class="flex flex-row border-0 border-green max-h-[720px] max-w-[1280px]">
     <nav class="absolute top-0 right-0 m-4 w-16 h-16">
       <Hamburger
         bind:open
@@ -57,8 +57,6 @@
         </ul>
       {/if}
     </nav>
-    <div class="flex flex-col items-center">
-      {@render children()}
-    </div>
+    {@render children()}
   </div>
 </ViamProvider>

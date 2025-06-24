@@ -4,7 +4,6 @@
     createResourceMutation,
     createResourceQuery,
   } from "$lib";
-  import VisionData from "$lib/vision-data.svelte";
   import { VisionClient, Struct } from "@viamrobotics/sdk";
   import type { DialConf } from "@viamrobotics/sdk";
   import { AppMode, appMode } from "$lib/stores";
@@ -87,8 +86,8 @@
     mutation.current.mutate(
       [
         Struct.fromJson({
-          command: "upload_image",
-          img_id: imgUUID as string,
+          command: "save_result",
+          result_id: imgUUID as string,
         }),
       ],
       // Optional callback functions as example:
@@ -131,13 +130,11 @@
 {#if query.current.error}
   {query.current.error.message}
 {:else}
-  <div class="grid grid-cols-2 min-w-[400px] border-1 border-red-500">
-    <div class="flex flex-col border-0 border-amber-300">
-      <div class="">
-        <Canvas {src} width={400} height={720} {detections} />
-      </div>
+  <div class="grid grid-cols-[1fr_400px] border-0 border-red-500 w-full h-full">
+    <div class="flex flex-col border-0 border-amber-300 w-full h-full">
+      <Canvas {src} width={880} height={720} {detections} />
     </div>
-    <div class="flex flex-col border-0 border-purple-300">
+    <div class="flex flex-col w-[400px] border-0 border-purple-300 ml-auto">
       {#if $appMode == AppMode.Calibrate}
         <p>Calibration</p>
       {:else}
