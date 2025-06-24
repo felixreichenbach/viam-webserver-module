@@ -47,6 +47,7 @@
 		"vitest": "^3.1.1"
 	},
 	"dependencies": {
+		"@viamrobotics/svelte-sdk": "^0.3.3",
 		"typescript-cookie": "^1.0.6"
 	}
 }
