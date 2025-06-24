@@ -6,8 +6,9 @@
   } from "$lib";
   import VisionData from "$lib/vision-data.svelte";
   import { VisionClient, Struct } from "@viamrobotics/sdk";
-  import type { DialConf } from "@viamrobotics/sdk";
+  import type { Detection, DialConf } from "@viamrobotics/sdk";
   import { AppMode, appMode } from "$lib/stores";
+  import Canvas from "$lib/Canvas.svelte";
 
   interface Props {
     data: {
@@ -57,6 +58,8 @@
         )
       : undefined
   );
+
+  const detectioncs = $derived(query.current.data?.detections ?? []);
 
   const data = $derived(query.current.data);
   const imgUUID = $derived(
@@ -131,12 +134,7 @@
   <div class="grid grid-cols-2 min-w-[400px] border-0 border-red-500">
     <div class="flex flex-col border-0 border-amber-300">
       <div class="">
-        <img
-          {src}
-          alt=""
-          width="700"
-          style="object-fit: contain; max-height: 720px;"
-        />
+        <Canvas {src} width={400} height={720} />
       </div>
     </div>
     <div class="flex flex-col border-2 border-purple-300">
