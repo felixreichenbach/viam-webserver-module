@@ -6,7 +6,6 @@
   } from "$lib";
   import { VisionClient, Struct } from "@viamrobotics/sdk";
   import type { DialConf } from "@viamrobotics/sdk";
-  import { AppMode, appMode } from "$lib/stores";
   import Canvas from "$lib/Canvas.svelte";
 
   interface Props {
@@ -62,7 +61,6 @@
 
   let detections = $derived(query.current.data?.detections ?? []);
 
-  const data = $derived(query.current.data);
   const imgUUID = $derived(
     query.current.data?.extra &&
       (query.current.data.extra.toJson() as any)["id"]
@@ -73,20 +71,19 @@
   function handleCheckContour() {
     acceptdisabled = true;
     detections = [];
+    message = undefined;
     query.current.refetch().then(() => {
       acceptdisabled = false;
     });
   }
 
   function handleAccept() {
-    if ($appMode === AppMode.Calibrate) {
-      saveContours();
-    } else {
-      saveImage();
-    }
+    saveResult();
+    detections = [];
+    acceptdisabled = true;
   }
 
-  function saveImage() {
+  function saveResult() {
     mutation.current.mutate(
       [
         Struct.fromJson({
@@ -107,28 +104,6 @@
       }
     );
   }
-
-  function saveContours() {
-    mutation.current.mutate(
-      [
-        Struct.fromJson({
-          command: "save_contours",
-          camera_name: props.cameraName,
-        }),
-      ],
-      // Optional callback functions as example:
-      {
-        onSuccess: () => {
-          console.log("Reference contours saved!");
-          message = "Reference contours saved successfully!";
-        },
-        onError(error, variables, context) {
-          console.error("Error saving reference contours: ", error);
-          message = "Error saving reference contours: " + error.message;
-        },
-      }
-    );
-  }
 </script>
 
 {#if query.current.error}
@@ -139,21 +114,14 @@
       <Canvas {src} width={880} height={720} {detections} />
     </div>
     <div class="flex flex-col w-[400px] border-0 border-purple-300 ml-auto">
-      {#if $appMode == AppMode.Calibrate}
-        <p>Calibration</p>
-      {:else}
-        <p>Verification</p>
-      {/if}
       <div class="flex flex-col items-center justify-center gap-4 h-full">
-        <button onclick={handleCheckContour}>
-          {$appMode == AppMode.Calibrate ? "Calibrate" : "Check"}</button
-        >
+        <button onclick={handleCheckContour}> Check</button>
         <button
           onclick={handleAccept}
           disabled={acceptdisabled || imgUUID == undefined}>Accept</button
         >
         {#if mutation.current.isSuccess}
-          <div class="flex flex-col items-center justify-center gap-4 h-full">
+          <div class="flex flex-col items-center justify-center gap-4">
             <h1 class="text-3xl font-bold">{message}</h1>
           </div>
         {:else if mutation.current.isError}
@@ -163,10 +131,12 @@
           </div>
         {/if}
         {#if detections.length > 0 && imgUUID}
-          <p>
-            Minimum Line Thickness: <br />
-            {detections[0].className}
-          </p>
+          <div>
+            <p>
+              Minimum Line Thickness: <br />
+              {detections[0].className}
+            </p>
+          </div>
         {/if}
       </div>
     </div>
