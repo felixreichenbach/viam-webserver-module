@@ -47,11 +47,6 @@
       {#if open}
         <ul id="nav" class="menu" transition:fly={{ y: -15 }}>
           <li>
-            <a href="/" role="button" onclick={toggleAppMode}
-              >{$appMode == AppMode.Calibrate ? "Verify" : "Calibrate"}</a
-            >
-          </li>
-          <li>
             <a href="/" role="button" onclick={reloadPage}>Reload</a>
           </li>
         </ul>

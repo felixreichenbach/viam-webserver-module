@@ -19,6 +19,8 @@
   }
   let { data: props }: Props = $props();
 
+  let acceptdisabled = $state(true);
+
   const visionClient = createResourceClient(
     VisionClient,
     () => Object.keys(props.dialConfig)[0],
@@ -58,7 +60,7 @@
       : undefined
   );
 
-  const detections = $derived(query.current.data?.detections ?? []);
+  let detections = $derived(query.current.data?.detections ?? []);
 
   const data = $derived(query.current.data);
   const imgUUID = $derived(
@@ -69,8 +71,10 @@
   let message: string | undefined = $state(undefined);
 
   function handleCheckContour() {
+    acceptdisabled = true;
+    detections = [];
     query.current.refetch().then(() => {
-      mutation.current.reset();
+      acceptdisabled = false;
     });
   }
 
@@ -146,8 +150,7 @@
         >
         <button
           onclick={handleAccept}
-          disabled={mutation.current.isSuccess || imgUUID == undefined}
-          >Accept</button
+          disabled={acceptdisabled || imgUUID == undefined}>Accept</button
         >
         {#if mutation.current.isSuccess}
           <div class="flex flex-col items-center justify-center gap-4 h-full">
@@ -158,6 +161,12 @@
             <h1 class="text-3xl font-bold">{message}</h1>
             <p>{mutation.current.error.message}</p>
           </div>
+        {/if}
+        {#if detections.length > 0 && imgUUID}
+          <p>
+            Minimum Line Thickness: <br />
+            {detections[0].className}
+          </p>
         {/if}
       </div>
     </div>

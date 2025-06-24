@@ -23,7 +23,6 @@
     if (src && ctx && canvasEl) {
       drawImage(src);
     }
-    console.log("detections changed:", detections);
   });
 
   async function drawImage(imageSrc: string) {
@@ -69,14 +68,6 @@
       ctx.lineWidth = 2; // Line thickness
 
       // Draw the rectangle outline
-
-      console.log(
-        typeof detection.xMin,
-        typeof detection.yMin,
-        typeof detection.xMax,
-        typeof detection.yMax
-      );
-
       const xMin =
         typeof detection.xMin === "bigint"
           ? Number(detection.xMin)
