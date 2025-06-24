@@ -3,7 +3,7 @@
     createResourceClient,
     createResourceMutation,
     createResourceQuery,
-  } from "$lib";
+  } from "@viamrobotics/svelte-sdk";
   import { VisionClient, Struct } from "@viamrobotics/sdk";
   import type { DialConf } from "@viamrobotics/sdk";
   import Canvas from "$lib/Canvas.svelte";

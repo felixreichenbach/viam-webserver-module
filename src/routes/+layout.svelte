@@ -1,19 +1,10 @@
 <script lang="ts">
   import "../app.css";
-  import { ViamProvider } from "$lib";
+  import { ViamProvider } from "@viamrobotics/svelte-sdk";
   import type { Snippet } from "svelte";
   import type { DialConf } from "@viamrobotics/sdk";
   import { Hamburger } from "svelte-hamburgers";
   import { fly } from "svelte/transition";
-
-  import { appMode } from "$lib/stores";
-  import { AppMode } from "$lib/stores";
-
-  function toggleAppMode() {
-    appMode.update((currentValue) =>
-      currentValue === AppMode.Default ? AppMode.Calibrate : AppMode.Default
-    );
-  }
 
   let open = $state(false);
 
