@@ -131,7 +131,7 @@
 {#if query.current.error}
   {query.current.error.message}
 {:else}
-  <div class="grid grid-cols-2 min-w-[400px] border-0 border-red-500">
+  <div class="grid grid-cols-2 min-w-[400px] border-1 border-red-500">
     <div class="flex flex-col border-0 border-amber-300">
       <div class="">
         <Canvas {src} width={400} height={720} {detections} />
@@ -161,8 +161,6 @@
             <h1 class="text-3xl font-bold">{message}</h1>
             <p>{mutation.current.error.message}</p>
           </div>
-        {:else}
-          <VisionData {data} thresholds={props.thresholds} />
         {/if}
       </div>
     </div>
