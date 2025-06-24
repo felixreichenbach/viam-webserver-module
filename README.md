@@ -82,7 +82,3 @@ Example:
 ```sh
 viam module build start --version 0.1.5-rc5
 ```
-
-## TODO
-
-- [ ] wait for mdns support by the TypeScript SDK
